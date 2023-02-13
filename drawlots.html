@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>제비뽑기</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="제비뽑기" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/drawlots.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            body {
+                overflow: hidden;
+                text-align: center;
+            }
+            .fullscreen {
+                position: absolute;
+                top: 16px;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .hidden {
+                position: absolute;
+                left: 0;
+                top: 0;
+                visibility: hidden;
+            }
+            .draw-item {
+                padding: 4px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+            .draw-item-name {
+                flex: 1 1 auto;
+            }
+            .draw-item-color {
+                flex: 0 1 auto;
+            }
+            .draw-item-amount {
+                flex: 0 1 auto;
+                text-align: right;
+                width: 48px;
+            }
+            input {
+                background: none;
+                border: none;
+                color: whitesmoke;
+                font-size: 16px;
+                min-width: 0px;
+            }
+            td {
+                border: 1px white solid;
+                font-size: 16px;
+                min-width: 0px;
+                padding: 4px 4px;
+            }
+            .button {
+                margin-top: 8px;
+                font-size: 24px;
+                border-radius: 25px;
+                background-color: rgb(72, 72, 144);
+                padding: 14px 38px;
+                cursor: pointer;
+                user-select: none;
+            }
+            .button-td {
+                cursor: pointer;
+                user-select: none;
+            }
+            .draw-top {
+                font-size: 24px;
+                position: absolute;
+                top: 16px;
+                left: 0;
+                right: 0;
+            }
+            .draw-result {
+                font-size: 8vh;
+            }
+            .draw-btn-holder {
+                position: absolute;
+                bottom: 32px;
+            }
+            .result-anim {
+                animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            @keyframes popin {
+                from {
+                    color:rgb(144, 144, 255);
+                    transform: scale(0.9);
+                }
+
+                to {
+                    color:whitesmoke;
+                    transform: scale(1);
+                }
+            }
+            textarea:focus, input:focus{
+                outline: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="fullscreen" id="drawlots-settings">
+            <div id="draw-holder">
+                <div id="dynamic-dumpster"></div>
+                <div style="height: 6px;"></div>
+                <div class="button" onclick="addItem()">종류 추가</div>
+                <div class="button" id="btn-go-draw" onclick="validateAndGoDraw()">완료</div>
+            </div>
+        </div>
+        <div class="fullscreen" id="drawlots-draw" style="visibility: hidden;">
+            <div class="draw-top"><span id="bin-left">0</span>개 남음</div>
+            <div class="draw-result" id="draw-result">🗳️</div>
+            <div class="draw-btn-holder">
+                <div class="button" onclick="draw()">뽑아요</div>
+                <div class="button" onclick="goSettings()">돌아가기</div>
+            </div>
+        </div>
+        <script>
+            var settingsScreen = document.getElementById("drawlots-settings");
+            var drawScreen = document.getElementById("drawlots-draw");
+            var dynamicDumpster = document.getElementById("dynamic-dumpster");
+            var btnGoDraw = document.getElementById("btn-go-draw");
+            var binLeft = document.getElementById("bin-left");
+            var drawResult = document.getElementById("draw-result");
+
+            var htmlDdHead = `
+                <table class="draw-item" id="draw-item-table">
+                    <tr style="font-weight: bold">
+                        <td>이름</td>
+                        <td>수량</td>
+                        <td></td>
+                    </tr>
+            `;
+            var htmlDdTail = `
+                </table>
+            `;
+
+            // array of { name: "name", amount: 1 }
+            var drawSettings = [];
+            // array of names
+            var drawBin = [];
+
+            var binIndex = 0;
+
+            var regexTestInteger = /^-?\d+$/;
+
+            const msgError = [ "완료", "이름을 모두 입력하세요", "수량이 올바르지 않아요", "수량은 양수여야 해요", "입력이 잘못되었어요" ];
+            const msgAllDrawn = "다 뽑았어요!"
+
+            function updateItemName(idx, name) {
+                drawSettings[idx].name = name;
+            }
+
+            function updateItemAmount(idx, amount) {
+                if (Number.isInteger(amount)) {
+                    drawSettings[idx].amount = amount;
+                } else {
+                    if (regexTestInteger.test(amount)) drawSettings[idx].amount = parseInt(amount, 10);
+                    else drawSettings[idx].amount = "";
+                }
+            }
+            
+            function addItem() {
+                drawSettings.push({ name: "", amount: 1 });
+                regenerateSettings();
+            }
+            
+            function removeItem(idx) {
+                drawSettings.splice(idx, 1);
+                regenerateSettings();
+            }
+
+            function regenerateSettings() {
+                if (drawSettings.length == 0) drawSettings.push({ name: "", amount: 1 });
+
+                var ddContent = htmlDdHead;
+                for (var i = 0; i < drawSettings.length; i++) {
+                    ddContent += buildHtmlDdItem(i, drawSettings[i].name, drawSettings[i].amount);
+                }
+                ddContent += htmlDdTail;
+
+                dynamicDumpster.innerHTML = ddContent;
+            }
+
+            function validateSettings() {
+                try {
+                    for (const drawItem of drawSettings) {
+                        // TODO: do something with this
+                        if (drawItem["name"].trim().length == 0) {
+                            return 1;
+                        }
+                        if (!Number.isInteger(drawItem["amount"])) {
+                            return 2;
+                        }
+                        if (drawItem["amount"] < 1) {
+                            return 3;
+                        }
+                    }
+                } catch (e) {
+                    return 4;
+                }
+                return 0;
+            }
+
+            function populateBin() {
+                drawBin = [];
+                for (const drawItem of drawSettings) {
+                    for (var i = 0; i < drawItem["amount"]; i++) {
+                        drawBin.push(drawItem["name"]);
+                    }
+                }
+                shuffle(drawBin);
+                binIndex = drawBin.length - 1;
+            }
+
+            function validateAndGoDraw() {
+                var validateResult = validateSettings();
+                if (validateResult == 0) {
+                    populateBin();
+                    binLeft.innerText = binIndex + 1;
+                    goDraw();
+                } else {
+                    btnGoDraw.innerText = msgError[validateResult];
+                    window.setTimeout(function() { btnGoDraw.innerText = msgError[0]; }, 1000);
+                }
+            }
+
+            function goSettings() {
+                settingsScreen.style.visibility = "visible";
+                drawScreen.style.visibility = "hidden";
+                drawResult.innerText = "🗳️";
+            }
+
+            function goDraw() {
+                settingsScreen.style.visibility = "hidden";
+                drawScreen.style.visibility = "visible";
+            }
+
+            function draw() {
+                if (binIndex == -1) {
+                    drawResult.innerText = msgAllDrawn;
+                    drawResult.style.fontSize = "48px";
+                    drawResult.classList.remove("result-anim");
+                    drawResult.offsetWidth;
+                    drawResult.classList.add("result-anim");
+                } else {
+                    drawResult.innerText = drawBin[binIndex];
+                    drawResult.style.fontSize = "8vh";
+                    drawResult.classList.remove("result-anim");
+                    drawResult.offsetWidth;
+                    drawResult.classList.add("result-anim");
+                    binIndex--;
+                    binLeft.innerText = binIndex + 1;
+                }
+            }
+
+            function buildHtmlDdItem(idx, text, amount) {
+                return `
+                    <tr>
+                        <td><input class="draw-item-name" id="draw-item-` + idx + `-name" placeholder="제비 종류" type="text" value="` + text + `" onchange="updateItemName(` + idx + `, value)" oninput="updateItemName(` + idx + `, value)"></td>
+                        <td><input class="draw-item-amount" id="draw-item-` + idx + `-amount" type="text" maxlength="4" value="` + amount + `" onchange="updateItemAmount(` + idx + `, value)" oninput="updateItemAmount(` + idx + `, value)"></td>
+                        <td class="button-td" onclick="removeItem(` + idx + `)">삭제</td>
+                    </tr>
+                `;
+            }
+
+            // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+            function shuffle(array) {
+                let currentIndex = array.length,  randomIndex;
+
+                // While there remain elements to shuffle.
+                while (currentIndex != 0) {
+
+                // Pick a remaining element.
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+                }
+
+                return array;
+            }
+
+            regenerateSettings();
+        </script>
+    </body>
+</html>

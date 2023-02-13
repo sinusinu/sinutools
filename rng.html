@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>랜덤숫자</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="랜덤숫자" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/rng.png">
+        <meta property="og:updated_time" content="1654610386" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            body {
+                overflow: hidden;
+                text-align: center;
+            }
+            .fullscreen {
+                position: absolute;
+                top: 16px;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            input {
+                background: none;
+                border: none;
+                color: whitesmoke;
+                text-align: center;
+                font-size: 96px;
+                width: 100%;
+            }
+            .settings-item {
+                margin-top: 24px;
+                margin-bottom: 24px;
+                font-size: 32px;
+            }
+            .btn-holder {
+                margin-top: 8px;
+            }
+            .button {
+                margin-top: 8px;
+                font-size: 24px;
+                border-radius: 25px;
+                background-color: rgb(72, 72, 144);
+                padding: 14px 38px;
+                cursor: pointer;
+                user-select: none;
+            }
+            input:focus {
+                outline: none;
+            }
+            .result-container {
+                position: absolute;
+                top: 0;
+                bottom: 16vh;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #result {
+                font-size: 96px;
+            }
+            .result-anim {
+                animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            .result-anim-rotate {
+                animation: popin-rotate 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            @keyframes popin {
+                from {
+                    color:rgb(144, 144, 255);
+                    transform: scale(0.9);
+                }
+
+                to {
+                    color:whitesmoke;
+                    transform: scale(1);
+                }
+            }
+            @keyframes popin-rotate {
+                from {
+                    rotate: 10deg;
+                    color:rgb(144, 144, 255);
+                    scale: 0.9;
+                }
+
+                to {
+                    rotate: 0deg;
+                    color:whitesmoke;
+                    scale: 1;
+                }
+            }
+            .pick-button-holder {
+                position: absolute;
+                bottom: 32px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="fullscreen" id="rng-settings">
+            <div class="settings-item"><input type="text" id="settings-from" value="0" onchange="updateSettingsState()" oninput="updateSettingsState()" /></div>
+            <div class="settings-item">부터 (포함)</div>
+            <div class="settings-item"><input type="text" id="settings-to" value="100" onchange="updateSettingsState()" oninput="updateSettingsState()" /></div>
+            <div class="settings-item">까지 (포함)</div>
+            <div class="btn-holder">
+                <div class="button" id="btn-go-roll" onclick="prepareRng()">완료</div>
+            </div>
+        </div>
+        <div class="fullscreen" id="rng-roll">
+            <div class="result-container"><div id="result">🤔</div></div>
+            <div class="pick-button-holder">
+                <div class="button" onclick="pickOne()">골라요</div>
+                <div class="button" onclick="switchScreen(true)">돌아가기</div>
+            </div>
+        </div>
+        <script>
+            var settingsScreen = document.getElementById("rng-settings");
+            var rollScreen = document.getElementById("rng-roll");
+            var btnGoRoll = document.getElementById("btn-go-roll");
+            var result = document.getElementById("result");
+
+            var inFrom = document.getElementById("settings-from");
+            var inTo = document.getElementById("settings-to");
+            var isValueValid = true;
+            
+            var valFrom = "";
+            var valTo = "";
+
+            var rngLb = 0;
+            var rngUb = 0;
+
+            var regexTestInteger = /^-?\d+$/;
+
+            function switchScreen(toSettings) {
+                if (toSettings) {
+                    settingsScreen.style.visibility = 'visible';
+                    rollScreen.style.visibility = 'hidden';
+                } else {
+                    settingsScreen.style.visibility = 'hidden';
+                    rollScreen.style.visibility = 'visible';
+                    result.innerText = "🤔";
+                }
+            }
+
+            function updateSettingsState() {             
+                valFrom = inFrom.value;
+                valTo = inTo.value;
+
+                isValueValid = regexTestInteger.test(valFrom) && regexTestInteger.test(valTo) && (parseInt(valFrom, 10) < parseInt(valTo, 10));
+
+                if (isValueValid) btnGoRoll.style.opacity = '100%';
+                else btnGoRoll.style.opacity = '20%';
+            }
+
+            function prepareRng() {
+                updateSettingsState();
+                if (isValueValid) {
+                    rngLb = parseInt(valFrom, 10);
+                    rngUb = parseInt(valTo, 10);
+                    switchScreen(false);
+                }
+            }
+
+            function pickOne() {
+                var rv = Math.floor(Math.random() * (rngUb + 1 - rngLb)) + rngLb;
+                result.innerText = rv;
+                result.classList.remove("result-anim");
+                result.classList.remove("result-anim-rotate");
+                if (rv == 56526171) {
+                    result.offsetWidth;
+                    result.classList.add("result-anim-rotate");
+                } else {
+                    result.offsetWidth;
+                    result.classList.add("result-anim");
+                }
+            }
+
+            inFrom.value = "0";
+            inTo.value = "100";
+            updateSettingsState();
+            switchScreen(true);
+        </script>
+    </body>
+</html>

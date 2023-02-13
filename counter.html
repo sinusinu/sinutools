@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>카운터</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="카운터" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/counter.png">
+        <meta property="og:updated_time" content="1644486137" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            body {
+                overflow: hidden;
+            }
+            .settings {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                user-select: none;
+                z-index: 1;
+            }
+            #settings-pane {
+                visibility: hidden;
+            }
+            .btn-settings {
+                font-size: 32px;
+                cursor: pointer;
+                opacity: 30%;
+            }
+            .counter-container-h {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 20%;
+                right: 20%;
+                font-size: 16vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .counter-container-v {
+                position: absolute;
+                top: 20%;
+                bottom: 20%;
+                left: 0;
+                right: 0;
+                font-size: 22vw;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .counter-mid {
+                width: 80%;
+                height: 80%;
+                background-color: rgb(72, 72, 144);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12vh;
+            }
+            #counter {
+                margin-top: -2vh;
+                user-select: none;
+            }
+            .blink {
+                animation: bgblink 0.2s linear forwards;
+            }
+            @keyframes bgblink {
+                from {
+                    background-color: rgb(94, 94, 136);
+                }
+
+                to {
+                    background-color: rgb(72, 72, 144);
+                }
+            }
+            input {
+                padding: 4px;
+                font-size: 14px;
+                margin-right: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="settings">
+            <tr>
+                <td><div class="btn-settings" onclick="toggleSettings()">⚙️</div></td>
+                <td><div id="settings-pane">
+                    <input type="button" style="margin-left: 8px" value="하나 빼기" onclick="decrement()">
+                    <input type="button" value="초기화" onclick="resetCount()">
+                    <input type="button" value="직접 입력" onclick="manualCount()">
+                </div></td>
+            </tr>
+        </table>
+        <div id="counter-container"><div class="counter-mid" id="counter-mid" onmousedown="increment()"><div id="counter">0</div></div></div>
+        <script>
+            var counter = document.getElementById("counter");
+            var counterMid = document.getElementById("counter-mid");
+            var counterCont = document.getElementById("counter-container");
+            var st = document.getElementById("settings-pane");
+
+            var count = 0;
+
+            function increment() {
+                count++;
+                counter.innerText = count;
+
+                counterMid.classList.remove("blink");
+                counterMid.offsetWidth;
+                counterMid.classList.add("blink");
+            }
+
+            function decrement() {
+                count--;
+                counter.innerText = count;
+            }
+
+            function resetCount() {
+                count = 0;
+                counter.innerText = count;
+            }
+
+            function manualCount() {
+                var i = Number(window.prompt("원하는 카운터 수를 입력하세요"));
+                if (isNaN(i)) return;
+                count = i;
+                counter.innerText = count;
+            }
+
+            function toggleSettings() {
+                if (st.style.visibility == "visible") st.style.visibility = "hidden";
+                else st.style.visibility = "visible";
+            }
+
+            function setHVLayout() {
+                if (window.innerWidth < window.innerHeight) {
+                    // portrait
+                    counterCont.classList.remove("counter-container-h");
+                    counterCont.classList.add("counter-container-v");
+                } else {
+                    // landscape
+                    counterCont.classList.remove("counter-container-v");
+                    counterCont.classList.add("counter-container-h");
+                }
+            }
+
+            setHVLayout();
+
+            // https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event
+            (function() {
+                window.addEventListener("resize", resizeThrottler, false);
+
+                var resizeTimeout;
+                function resizeThrottler() {
+                    if (!resizeTimeout) {
+                        resizeTimeout = setTimeout(function() {
+                            resizeTimeout = null;
+                            actualResizeHandler();
+                        }, 100);
+                    }
+                }
+
+                function actualResizeHandler() {
+                    setHVLayout();
+                }
+            }());
+        </script>
+    </body>
+</html>

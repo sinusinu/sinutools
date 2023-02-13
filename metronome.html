@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>메트로놈</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="메트로놈" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/metronome.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            .fullscreen {
+                position: absolute;
+                top: 16px;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: -1;
+            }
+            .top-panel {
+                position: absolute;
+                top: 24px;
+                left: 0;
+                right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
+            .notice-fo {
+                padding-left: 16px;
+                padding-right: 16px;
+                color: rgb(130, 130, 200);
+                animation: fadeout 10s linear forwards;
+            }
+            @keyframes fadeout {
+                from { opacity: 100%; }
+                to { opacity: 0%; }
+            }
+            #visual-cue {
+                font-size: 32px;
+                visibility: visible;
+                user-select: none;
+            }
+            .vc-fo {
+                animation: fadeout 0.1s linear forwards;
+            }
+            #drawarea {
+                margin-bottom: 56px;
+            }
+            .bottom-panel {
+                position: absolute;
+                width: 300px;
+                bottom: 24px;
+                left: 0;
+                right: 0;
+                margin-left: auto; 
+                margin-right: auto; 
+                text-align: center;
+            }
+            input#bpm-slider {
+                width: 300px;
+            }
+            .bpm-display-container {
+                font-size: 24px;
+                text-align: center;
+                padding-bottom: 8px;
+                user-select: none;
+            }
+            #bpm-display {
+                font-size: 48px;
+            }
+            .button {
+                text-align: center;
+                margin-top: 8px;
+                font-size: 24px;
+                border-radius: 25px;
+                background-color: rgb(72, 72, 144);
+                padding: 14px 38px;
+                cursor: pointer;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="top-panel">
+            <div class="settings">
+                <input type="checkbox" id="settings-audio" onclick="updateSettings(true)" checked>
+                <label for="settings-audio">소리 알림</label>
+                <input type="checkbox" id="settings-visual" onclick="updateSettings(false)" checked>
+                <label for="settings-visual">시각적 알림</label>
+            </div>
+            <div class="notice-fo">※ 브라우저의 정책 문제로 오디오가 올바르게 작동하지 않을 수 있습니다. 소리가 나지 않는다면 관련 설정을 확인해보세요.</div>
+        </div>
+        <div class="fullscreen">
+            <div id="visual-cue">　</div>
+            <canvas id="drawarea"></canvas>
+        </div>
+        <div class="bottom-panel">
+            <div class="bpm-display-container"><span id="bpm-display">120</span>bpm</div>
+            <input id="bpm-slider" type="range" min="40" max="240" value="120" onpointermove="updateBpm()" onchange="updateBpm()" />
+            <div class="button" id="btn-toggle" onclick="toggleMetronome()">똑딱여요</div>
+        </div>
+        <script>
+            var audioContext = null;
+            var gainNode = null;
+            var osc = null;
+
+            const freqHigh = 1046.5022612023945;
+            const freqLow = 523.2511306011972;
+            var isBeeping = false;
+
+            var canvas = document.getElementById("drawarea");
+            /** @type {CanvasRenderingContext2D} */
+            var ctx = canvas.getContext('2d');
+
+            var bpmDisplay = document.getElementById("bpm-display");
+            var bpmSlider = document.getElementById("bpm-slider");
+            var btnToggle = document.getElementById("btn-toggle");
+            var visualCue = document.getElementById("visual-cue");
+            
+            var cvSize = 0;
+            var cvTiming = performance.now();
+
+            var metroTime = 0.0;
+            var metroTimeFloor = 0;
+
+            var bpm = 120;
+            var isRunning = false;
+
+            var settingsAudio = document.getElementById("settings-audio");
+            var settingsVisual = document.getElementById("settings-visual");
+            var indicateAudio = true;
+            var indicateVisual = true;
+
+            var isAndroid = false;
+            var isAndroidAudioWarningShown = false;
+            
+            function render() {
+                var currentTiming = performance.now();
+                var delta = currentTiming - cvTiming;
+                cvTiming = currentTiming;
+                
+                if (isRunning) {
+                    //metroTime += (delta / 1000.0) / (60.0 / bpm);
+                    metroTime += delta * bpm / 60000.0;
+                    var newFloor = Math.floor(metroTime + 0.5);
+                    if (metroTimeFloor != newFloor) {
+                        if (indicateAudio) {
+                            if ((newFloor - 1) % 4) tryPlayBeep(freqLow);
+                            else tryPlayBeep(freqHigh);
+                        }
+                        if (indicateVisual) {
+                            visualCue.textContent = '🟢';
+                            window.setTimeout(() => {
+                                visualCue.textContent = '　';
+                            }, 100);
+                        }
+                        metroTimeFloor = newFloor;
+                    }
+
+                    if (isBeeping) {
+                        if (gainNode.gain.value < 0.2) {
+                            tryStopBeep();
+                        }
+                    }
+                }
+
+                // TODO: make these static images generated on the fly on resize
+                //       it will be better performance-wise to draw 3 images
+                //       instead of all the vector path shenanigans
+
+                ctx.clearRect(0, 0, cvSize, cvSize);
+                ctx.lineWidth = 2;
+                
+                // upper background
+                ctx.fillStyle = '#777';
+                ctx.beginPath();
+                ctx.moveTo(0.38 * cvSize, 0.1 * cvSize);
+                ctx.lineTo(0.62 * cvSize, 0.1 * cvSize);
+                ctx.lineTo(0.79 * cvSize, 0.9 * cvSize);
+                ctx.lineTo(0.21 * cvSize, 0.9 * cvSize);
+                ctx.fill();
+                
+                // upper inner background
+                ctx.fillStyle = '#333';
+                ctx.beginPath();
+                ctx.moveTo(0.40 * cvSize, 0.12 * cvSize);
+                ctx.lineTo(0.60 * cvSize, 0.12 * cvSize);
+                ctx.lineTo(0.77 * cvSize, 0.9 * cvSize);
+                ctx.lineTo(0.23 * cvSize, 0.9 * cvSize);
+                ctx.fill();
+                
+                // upper background outline
+                ctx.strokeStyle = '#444';
+                ctx.beginPath();
+                ctx.moveTo(0.38 * cvSize, 0.1 * cvSize);
+                ctx.lineTo(0.62 * cvSize, 0.1 * cvSize);
+                ctx.lineTo(0.79 * cvSize, 0.9 * cvSize);
+                ctx.lineTo(0.21 * cvSize, 0.9 * cvSize);
+                ctx.closePath();
+                ctx.stroke();
+
+                // pendulum guide background
+                ctx.strokeStyle = '#aaa';
+                ctx.lineWidth = 32;
+                ctx.beginPath();
+                ctx.moveTo(0.5 * cvSize, 0.7 * cvSize);
+                ctx.lineTo(0.5 * cvSize, 0.175 * cvSize);
+                ctx.stroke();
+
+                ctx.save();
+                // pendulum
+                ctx.translate(0.5 * cvSize, 0.7 * cvSize);
+                ctx.rotate(Math.sin(metroTime * Math.PI));
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 8;
+                ctx.beginPath();
+                ctx.moveTo(0, 0.1 * cvSize);
+                ctx.lineTo(0, -0.5 * cvSize);
+                ctx.stroke();
+                ctx.restore();
+                
+                // bottom background
+                ctx.fillStyle = '#9E6C4C';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo((0.4 - (0.25 * 0.6)) * cvSize, 0.7 * cvSize);
+                ctx.lineTo((0.6 + (0.25 * 0.6)) * cvSize, 0.7 * cvSize);
+                ctx.lineTo(0.8 * cvSize, 0.9 * cvSize);
+                ctx.lineTo(0.2 * cvSize, 0.9 * cvSize);
+                ctx.fill();
+                
+                // bottom background outline
+                ctx.strokeStyle = 'black';
+                ctx.beginPath();
+                ctx.moveTo((0.4 - (0.25 * 0.6)) * cvSize, 0.7 * cvSize);
+                ctx.lineTo((0.6 + (0.25 * 0.6)) * cvSize, 0.7 * cvSize);
+                ctx.lineTo(0.8 * cvSize, 0.9 * cvSize);
+                ctx.lineTo(0.2 * cvSize, 0.9 * cvSize);
+                ctx.closePath();
+                ctx.stroke();
+                
+                // wish I could use requestAnimationFrame here, but that doesn't work well when the browser is not rendering (e.g. is placed behind other window)
+                window.setTimeout(render, 10);
+            }
+
+            function tryPlayBeep(freq) {
+                if (osc !== null) return;
+                audioContext.resume().then(() => {
+                    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                    gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.05);
+                    osc = audioContext.createOscillator();
+                    osc.type = "triangle";
+                    osc.frequency.value = freq;
+                    osc.connect(gainNode);
+                    osc.start();
+                    isBeeping = true;
+                });
+            }
+
+            function tryStopBeep() {
+                try {
+                    audioContext.resume().then(() => {
+                        isBeeping = false;
+                        if (osc == null) return;
+                        osc.stop();
+                        delete osc;
+                        osc = null;
+                    });
+                } catch {}
+            }
+
+            function updateBpm() {
+                bpmDisplay.innerText = bpmSlider.value;
+            }
+
+            function toggleMetronome() {
+                if (audioContext === null) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    gainNode = audioContext.createGain();
+                    gainNode.connect(audioContext.destination);
+                }
+                if (isRunning) {
+                    metroTime = 0;
+                    metroTimeFloor = 0;
+                    bpmSlider.style.visibility = 'visible';
+                    tryStopBeep();
+                    isRunning = false;
+                    btnToggle.innerText = "똑딱여요";
+                } else {
+                    var newBpm = bpmSlider.value;
+                    bpm = parseInt(newBpm);
+                    metroTime = 0;
+                    metroTimeFloor = 0;
+                    bpmSlider.style.visibility = 'hidden';
+                    isRunning = true;
+                    btnToggle.innerText = "멈춰요";
+                }
+            }
+
+            function updateSettings(isAudio) {
+                if (isAndroid && !isAndroidAudioWarningShown) {
+                    alert("경고: Android 장치에서는 소리 알림이 정상 작동하지 않으며 사용을 권장하지 않습니다. 경고를 무시하고 소리 알림을 켜려면 옵션을 한 번 더 선택해주세요.");
+                    settingsAudio.checked = false;
+                    indicateAudio = false;
+                    isAndroidAudioWarningShown = true;
+                    return;
+                }
+                indicateAudio = settingsAudio.checked;
+                indicateVisual = settingsVisual.checked;
+            }
+
+            // disable audio cue by default on android devices
+            var ua = navigator.userAgent;
+            if (ua.indexOf("Android ") > -1) {
+                isAndroid = true;
+                settingsAudio.checked = false;
+                indicateAudio = false;
+            }
+
+            // window resize handler
+            var resizeCanvas = function() {
+                var vpWidth = window.innerWidth;
+                var vpHeight = window.innerHeight;
+
+                if (vpWidth > vpHeight) cvSize = vpHeight * 0.6;    // landscape
+                else cvSize = vpWidth * 0.6;                        // portrait
+
+                canvas.setAttribute("width", cvSize);
+                canvas.setAttribute("height", cvSize);
+            };
+            
+            // optimized resize event
+            // https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event#requestanimationframe_customevent (minimized)
+            !function(e,n,i){i=i||window;var t=!1;i.addEventListener(e,function(){t||(t=!0,requestAnimationFrame(function(){i.dispatchEvent(new CustomEvent(n)),t=!1}))})}("resize","optimizedResize");
+            window.addEventListener("optimizedResize", resizeCanvas);
+
+            resizeCanvas();
+            render();
+            updateBpm();
+        </script>
+    </body>
+</html>

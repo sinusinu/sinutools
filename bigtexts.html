@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>멈춘큰글</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta property="og:title" content="멈춘큰글" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/bigtexts.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            html, body {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            .cont {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .bigtext {
+                margin: 0;
+                font-size: 5vw;
+                line-height: 4.995vw;
+                user-select: none;
+                text-align: center;
+            }
+            .btn-settings {
+                position: absolute;
+                top: 16px;
+                left: 20px;
+                opacity: 75%;
+                font-size: 32px;
+                cursor: pointer;
+                visibility: hidden;
+            }
+            .pane-settings {
+                position: absolute;
+                top: 16px;
+                left: 20px;
+                background-color: #000000A0;
+                z-index: 1;
+                border-radius: 12px;
+                border: 3px #FFFFFF80 solid;
+                padding: 8px;
+            }
+            .btn-close {
+                background: lightgray;
+                color: black;
+                text-align: center;
+                margin-top: 8px;
+                padding: 4px;
+                border-radius: 4px;
+                font-size: 16px;
+                cursor: pointer;
+                user-select: none;
+            }
+            textarea {
+                font-family: sans-serif;
+                resize: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="btn-settings" class="btn-settings" onclick="showSettings()">⚙️</div>
+        <div id="pane-settings" class="pane-settings">
+            <div>텍스트</div>
+            <div><textarea id="settings-text" type="text" value="다람쥐 헌 쳇바퀴에 타고파" oninput="setText(this.value)"></textarea></div>
+            <div style="height: 8px"></div>
+            <div>크기</div>
+            <div><input id="settings-size" type="range" min="1" max="50" value="5" oninput="setSize(this.value)"></div>            
+            <div>테마</div>
+            <div>
+                <select id="settings-color" onchange="setColor(this.value)">
+                    <option value="default">기본</option>
+                    <option value="black-and-white">흑백</option>
+                    <option value="in-the-dark">어둡게</option>
+                    <option value="flashbang">눈부심</option>
+                    <option value="scarlet">적색</option>
+                </select>
+            </div>
+            <div class="btn-close" onclick="hideSettings(false)">닫기</div>
+            <div class="btn-close" onclick="hideSettings(true)">닫고 숨기기</div>
+        </div>
+        <div class="cont">
+            <div id="bigboi" class="bigtext">다람쥐 헌 쳇바퀴에 타고파</div>
+        </div>
+        <script>
+            var bigboi = document.getElementById("bigboi");
+            var btnSettings = document.getElementById("btn-settings");
+            var paneSettings = document.getElementById("pane-settings");
+            var settingsText = document.getElementById("settings-text");
+            var settingsSize = document.getElementById("settings-size");
+            var settingsColor = document.getElementById("settings-color");
+
+            var colors = {
+                "default": {
+                    back: null,
+                    fore: null
+                },
+                "black-and-white": {
+                    back: "black",
+                    fore: "white"
+                },
+                "in-the-dark": {
+                    back: "black",
+                    fore: "#585858"
+                },
+                "flashbang": {
+                    back: "white",
+                    fore: "black"
+                },
+                "scarlet": {
+                    back: "black",
+                    fore: "#D32F2F"
+                },
+            };
+
+            function setText(newText) {
+                if (newText.trim().length == 0) return;
+                bigboi.innerText = newText;
+            }
+            
+            function setSize(newSize) {
+                bigboi.style.fontSize = newSize + "vw";
+                bigboi.style.lineHeight = (newSize * 0.999) + "vw";
+            }
+
+            function setColor(newColor) {
+                console.log(newColor);
+                var color = colors[newColor];
+                if (color === undefined) return;
+                bigboi.style.color = color.fore;
+                document.body.style.backgroundColor = color.back;
+            }
+
+            function hideSettings(shouldHideButton) {
+                paneSettings.style.visibility = "hidden";
+                btnSettings.style.visibility = "visible";
+                btnSettings.style.opacity = (shouldHideButton == true) ? "5%" : "100%";
+            }
+
+            function showSettings() {
+                paneSettings.style.visibility = "visible";
+                btnSettings.style.visibility = "hidden";
+            }
+
+            settingsText.value = "다람쥐 헌 쳇바퀴에 타고파";
+            settingsSize.value = 5;
+            settingsColor.value = "default";
+        </script>
+    </body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>빕키</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="빕키" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/beepkeys.png">
+        <meta property="og:updated_time" content="1666082183" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            html, body {
+                overflow: hidden;
+                user-select: none;
+                font-size: 12px;
+            }
+            .fullscreen {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: -1;
+            }
+            .keyholder {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .keyline {
+                max-width: 480px;
+                display: flex;
+                flex-direction: row;
+                cursor: pointer;
+            }
+            .key-right-line {
+                box-sizing: border-box;
+                border-right: 2px #333 solid;
+            }
+            .key-white {
+                /* keywidth-one */
+                height: 100px;
+                border-radius: 0 0 4px 4px;
+                background: linear-gradient(#DDD, #FFF);
+                text-align: center;
+                color: black;
+            }
+            .key-white-third {
+                /* keywidth-third */
+                height: 90px;
+                background: #DDD;
+            }
+            .key-white-two-third {
+                /* keywidth-two-third */
+                height: 90px;
+                background: #DDD;
+            }
+            .key-black {
+                /* keywidth-two-third */
+                height: 90px;
+                border-radius: 0 0 4px 4px;
+                box-shadow: 0px 3px 3px #AAA;
+                background: linear-gradient(#333, #444);
+                text-align: center;
+                color: white;
+            }
+            .key-black-half {
+                /* keywidth-third */
+                height: 90px;
+                border-radius: 0 0 4px 4px;
+                box-shadow: 0px 3px 3px #AAA;
+                background: linear-gradient(#333, #444);
+                text-align: center;
+                color: white;
+            }
+            .keywidth-one-fillwidth { width: calc(100vw / 8); }
+            .keywidth-third-fillwidth { width: calc(100vw / 24); }
+            .keywidth-two-third-fillwidth { width: calc(100vw / 12); }
+            .keywidth-one-compact { width: 45px; }
+            .keywidth-third-compact { width: 15px; }
+            .keywidth-two-third-compact { width: 30px; }
+            .keywidth-one-compact { width: 45px; }
+            .keywidth-third-compact { width: 15px; }
+            .keywidth-two-third-compact { width: 30px; }
+            .keywidth-one { width: 60px; }
+            .keywidth-third { width: 20px; }
+            .keywidth-two-third { width: 40px; }
+        </style>
+    </head>
+    <body>
+        <div class="fullscreen">
+            <div class="keyholder">
+                <div class="keyline">
+                    <div class="key-white-two-third"></div>
+                    <div class="key-black" onpointerdown="startBeep('cs5', 554.37)" onpointerup="stopBeep('cs5')" onpointerleave="stopBeep('cs5')">2</div>
+                    <div class="key-white-third"></div>
+                    <div class="key-black" onpointerdown="startBeep('ds5', 622.25)" onpointerup="stopBeep('ds5')" onpointerleave="stopBeep('ds5')">3</div>
+                    <div class="key-white-two-third key-right-line"></div>
+                    <div class="key-white-two-third"></div>
+                    <div class="key-black" onpointerdown="startBeep('fs5', 739.99)" onpointerup="stopBeep('fs5')" onpointerleave="stopBeep('fs5')">5</div>
+                    <div class="key-white-third"></div>
+                    <div class="key-black" onpointerdown="startBeep('gs5', 830.61)" onpointerup="stopBeep('gs5')" onpointerleave="stopBeep('gs5')">6</div>
+                    <div class="key-white-third"></div>
+                    <div class="key-black" onpointerdown="startBeep('as5', 932.33)" onpointerup="stopBeep('as5')" onpointerleave="stopBeep('as5')">7</div>
+                    <div class="key-white-two-third key-right-line"></div>
+                    <div class="key-white-two-third"></div>
+                    <div class="key-black-half" onpointerdown="startBeep('cs6', 1108.73)" onpointerup="stopBeep('cs6')" onpointerleave="stopBeep('cs6')">9</div>
+                </div>
+                <div class="keyline">
+                    <div class="key-white key-right-line" onpointerdown="startBeep('c5', 523.25)" onpointerup="stopBeep('c5')" onpointerleave="stopBeep('c5')">q</div>
+                    <div class="key-white key-right-line" onpointerdown="startBeep('d5', 587.33)" onpointerup="stopBeep('d5')" onpointerleave="stopBeep('d5')">w</div>
+                    <div class="key-white key-right-line" onpointerdown="startBeep('e5', 659.25)" onpointerup="stopBeep('e5')" onpointerleave="stopBeep('e5')">e</div>
+                    <div class="key-white key-right-line" onpointerdown="startBeep('f5', 698.46)" onpointerup="stopBeep('f5')" onpointerleave="stopBeep('f5')">r</div>
+                    <div class="key-white key-right-line" onpointerdown="startBeep('g5', 783.99)" onpointerup="stopBeep('g5')" onpointerleave="stopBeep('g5')">t</div>
+                    <div class="key-white key-right-line" onpointerdown="startBeep('a5', 880.00)" onpointerup="stopBeep('a5')" onpointerleave="stopBeep('a5')">y</div>
+                    <div class="key-white key-right-line" onpointerdown="startBeep('b5', 987.77)" onpointerup="stopBeep('b5')" onpointerleave="stopBeep('b5')">u</div>
+                    <div class="key-white" onpointerdown="startBeep('c6', 1046.50)" onpointerup="stopBeep('c6')" onpointerleave="stopBeep('c6')">i</div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var audioContext = null;
+            var oscillators = {};
+            var gains = {};
+
+            function startBeep(tag, freq) {
+                if (audioContext == null) audioContext = new AudioContext();
+                var osc = audioContext.createOscillator();
+                var gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                oscillators[tag] = osc;
+                gains[tag] = gain;
+                gain.gain.setValueAtTime(0, audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.1);
+                osc.type = "sine";
+                osc.frequency.value = freq;
+                osc.start();
+            }
+
+            function stopBeep(tag) {
+                if (oscillators[tag] != null) {
+                    var cgain = gains[tag].gain.value;
+                    gains[tag].gain.cancelScheduledValues(audioContext.currentTime);
+                    gains[tag].gain.setValueAtTime(cgain, audioContext.currentTime);
+                    gains[tag].gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.25);
+
+                    oscillators[tag].stop(audioContext.currentTime + 0.25);
+                    oscillators[tag] = null;
+                }
+            }
+
+            var keys = [ "q", "2", "w", "3", "e", "r", "5", "t", "6", "y", "7", "u", "i", "9" ]
+            var tags = [ 'c5', 'cs5', 'd5', 'ds5', 'e5', 'f5', 'fs5', 'g5', 'gs5', 'a5', 'as5', 'b5', 'c6', 'cs6' ]
+            var freqs = [ 523.25, 554.37, 587.33, 622.25, 659.25, 698.46, 739.99, 783.99, 830.61, 880.00, 932.33, 987.77, 1046.50, 1108.73 ];
+
+            document.addEventListener('keydown', (e) => {
+                if (e.repeat) return;
+                var k = keys.indexOf(e.key);
+                if (k != -1) {
+                    startBeep(tags[k], freqs[k]);
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                var k = keys.indexOf(e.key);
+                if (k != -1) {
+                    stopBeep(tags[k]);
+                }
+            });
+            
+            function domReady(fn) {
+                document.addEventListener("DOMContentLoaded", fn);
+                if (document.readyState === "interactive" || document.readyState === "complete" ) fn();
+            }
+
+            function clearSizeClasses() {
+                var things = document.getElementsByClassName("key-white");
+                for (const thing of things) {
+                    thing.classList.remove("keywidth-one-fillwidth");
+                    thing.classList.remove("keywidth-one-compact");
+                    thing.classList.remove("keywidth-one");
+                }
+                things = document.getElementsByClassName("key-white-third");
+                for (const thing of things) {
+                    thing.classList.remove("keywidth-third-fillwidth");
+                    thing.classList.remove("keywidth-third-compact");
+                    thing.classList.remove("keywidth-third");
+                }
+                things = document.getElementsByClassName("key-white-two-third");
+                for (const thing of things) {
+                    thing.classList.remove("keywidth-two-third-fillwidth");
+                    thing.classList.remove("keywidth-two-third-compact");
+                    thing.classList.remove("keywidth-two-third");
+                }
+                things = document.getElementsByClassName("key-black");
+                for (const thing of things) {
+                    thing.classList.remove("keywidth-two-third-fillwidth");
+                    thing.classList.remove("keywidth-two-third-compact");
+                    thing.classList.remove("keywidth-two-third");
+                }
+                things = document.getElementsByClassName("key-black-half");
+                for (const thing of things) {
+                    thing.classList.remove("keywidth-third-fillwidth");
+                    thing.classList.remove("keywidth-third-compact");
+                    thing.classList.remove("keywidth-third");
+                }
+            }
+
+            function checkPageWidth() {
+                clearSizeClasses();
+                var vpWidth = window.innerWidth;
+                if (vpWidth > 480) {
+                    // full
+                    var things = document.getElementsByClassName("key-white");
+                    for (const thing of things) thing.classList.add("keywidth-one");
+                    things = document.getElementsByClassName("key-white-third");
+                    for (const thing of things) thing.classList.add("keywidth-third");
+                    things = document.getElementsByClassName("key-white-two-third");
+                    for (const thing of things) thing.classList.add("keywidth-two-third");
+                    things = document.getElementsByClassName("key-black");
+                    for (const thing of things) thing.classList.add("keywidth-two-third");
+                    things = document.getElementsByClassName("key-black-half");
+                    for (const thing of things) thing.classList.add("keywidth-third");
+                } else if (vpWidth > 360) {
+                    // compact
+                    var things = document.getElementsByClassName("key-white");
+                    for (const thing of things) thing.classList.add("keywidth-one-compact");
+                    things = document.getElementsByClassName("key-white-third");
+                    for (const thing of things) thing.classList.add("keywidth-third-compact");
+                    things = document.getElementsByClassName("key-white-two-third");
+                    for (const thing of things) thing.classList.add("keywidth-two-third-compact");
+                    things = document.getElementsByClassName("key-black");
+                    for (const thing of things) thing.classList.add("keywidth-two-third-compact");
+                    things = document.getElementsByClassName("key-black-half");
+                    for (const thing of things) thing.classList.add("keywidth-third-compact");
+                } else {
+                    // fillwidth
+                    var things = document.getElementsByClassName("key-white");
+                    for (const thing of things) thing.classList.add("keywidth-one-fillwidth");
+                    things = document.getElementsByClassName("key-white-third");
+                    for (const thing of things) thing.classList.add("keywidth-third-fillwidth");
+                    things = document.getElementsByClassName("key-white-two-third");
+                    for (const thing of things) thing.classList.add("keywidth-two-third-fillwidth");
+                    things = document.getElementsByClassName("key-black");
+                    for (const thing of things) thing.classList.add("keywidth-two-third-fillwidth");
+                    things = document.getElementsByClassName("key-black-half");
+                    for (const thing of things) thing.classList.add("keywidth-third-fillwidth");
+                }
+            }
+
+            domReady(checkPageWidth);
+
+            // optimized resize event
+            // https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event#requestanimationframe_customevent (minimized)
+            !function(e,n,i){i=i||window;var t=!1;i.addEventListener(e,function(){t||(t=!0,requestAnimationFrame(function(){i.dispatchEvent(new CustomEvent(n)),t=!1}))})}("resize","optimizedResize");
+            window.addEventListener("optimizedResize", checkPageWidth);
+        </script>
+    </body>
+</html>

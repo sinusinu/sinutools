@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>원픽</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="원픽" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/onepick.png">
+        <meta property="og:updated_time" content="1644486137" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            body {
+                overflow: hidden;
+                text-align: center;
+            }
+            .fullscreen {
+                position: absolute;
+                top: 16px;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .ta-holder {
+                width: 80%;
+                height: 60%;
+                margin: 16px;
+            }
+            textarea.option-bin {
+                width: 100%;
+                height: 100%;
+                resize: none;
+                border: none;
+                background-color: rgb(72, 72, 144);
+                color: whitesmoke;
+                text-align: center;
+                font-family: 'Noto Sans KR', sans-serif;
+                font-size: 24px;
+            }
+            ::placeholder {
+                color: rgb(125, 125, 170);
+                opacity: 1;
+            }
+            .btn-holder {
+                margin-top: 8px;
+            }
+            .button {
+                margin-top: 8px;
+                font-size: 24px;
+                border-radius: 25px;
+                background-color: rgb(72, 72, 144);
+                padding: 14px 38px;
+                cursor: pointer;
+                user-select: none;
+            }
+            .fullscreen#screen-pick {
+                visibility: hidden;
+            }
+            .answer-container {
+                position: absolute;
+                top: 0;
+                bottom: 16vh;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #answer {
+                font-size: 8vh;
+            }
+            .answer-anim {
+                animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            @keyframes popin {
+                from {
+                    color:rgb(144, 144, 255);
+                    transform: scale(0.9);
+                }
+
+                to {
+                    color:whitesmoke;
+                    transform: scale(1);
+                }
+            }
+            .rblink {
+                animation: bgrblink 0.2s linear forwards;
+            }
+            @keyframes bgrblink {
+                from {
+                    background-color: rgb(160, 70, 70);
+                }
+
+                to {
+                    background-color: rgb(72, 72, 144);
+                }
+            }
+            .pick-button-holder {
+                position: absolute;
+                bottom: 32px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="fullscreen" id="screen-input">
+            <div style="font-size: 20px;">
+                선택하고자 하는 항목을 전부 입력하세요<br/>
+                항목은 줄바꿈으로 구분됩니다
+            </div>
+            <div class="ta-holder">
+                <textarea class="option-bin" id="option-bin" placeholder="고양이
+강아지"></textarea>
+            </div>
+            <div class="btn-holder">
+                <div class="button" id="go-pick-btn" onclick="preparePick()">완료</div>
+            </div>
+        </div>
+        <div class="fullscreen" id="screen-pick">
+            <div class="answer-container"><div id="answer">🤔</div></div>
+            <div class="pick-button-holder">
+                <div class="button" onclick="pickOne()">골라요</div>
+                <div class="button" onclick="backToInput()">돌아가기</div>
+            </div>
+        </div>
+        <script>
+            var rawItemList = document.getElementById("option-bin");
+            var itemList = [];
+            var goPickButton = document.getElementById("go-pick-btn");
+            var answer = document.getElementById("answer");
+            var inputScreen = document.getElementById("screen-input");
+            var pickScreen = document.getElementById("screen-pick");
+
+            function preparePick() {
+                var text = rawItemList.value;
+                if (text == null || text == "") {
+                    text = "고양이\n강아지";
+                }
+                itemList = text.match(/[^\r\n]+/g);
+                if (itemList == null || itemList.length == 0) {
+                    goPickButton.classList.remove("rblink");
+                    goPickButton.offsetWidth;
+                    goPickButton.classList.add("rblink");
+                    return;
+                }
+                goPick();
+            }
+
+            function goPick() {
+                inputScreen.style.visibility = "hidden";
+                pickScreen.style.visibility = "visible";
+                answer.innerText = "🤔";
+            }
+
+            function pickOne() {
+                var rv = Math.floor(Math.random() * itemList.length);
+                answer.innerText = itemList[rv];
+                answer.classList.remove("answer-anim");
+                answer.offsetWidth;
+                answer.classList.add("answer-anim");
+            }
+
+            function backToInput() {
+                inputScreen.style.visibility = "visible";
+                pickScreen.style.visibility = "hidden";
+            }
+        </script>
+    </body>
+</html>

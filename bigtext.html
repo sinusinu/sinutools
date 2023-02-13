@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>흐르는큰글</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta property="og:title" content="흐르는큰글" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/bigtext.png">
+        <meta property="og:updated_time" content="1676275969" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            html, body {
+                margin: 0;
+                max-width: 100%;
+                overflow: hidden;
+            }
+            .bigtext {
+                font-size: 48vh;
+                white-space: nowrap;
+                margin: 0;
+                position: absolute;
+                top: 40%;
+                transform: translateY(-40%);
+                user-select: none;
+            }
+            .btn-settings {
+                position: absolute;
+                top: 16px;
+                left: 20px;
+                opacity: 75%;
+                font-size: 32px;
+                cursor: pointer;
+                visibility: hidden;
+            }
+            .pane-settings {
+                position: absolute;
+                top: 16px;
+                left: 20px;
+                background-color: #000000A0;
+                z-index: 1;
+                border-radius: 12px;
+                border: 3px #FFFFFF80 solid;
+                padding: 8px;
+            }
+            .btn-close {
+                background: lightgray;
+                color: black;
+                text-align: center;
+                margin-top: 8px;
+                padding: 4px;
+                border-radius: 4px;
+                font-size: 16px;
+                cursor: pointer;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="btn-settings" class="btn-settings" onclick="showSettings()">⚙️</div>
+        <div id="pane-settings" class="pane-settings">
+            <div>텍스트</div>
+            <div><input id="settings-text" type="text" value="다람쥐 헌 쳇바퀴에 타고파" oninput="setText(this.value)"></div>
+            <div style="height: 8px"></div>
+            <div>스크롤 속도</div>
+            <div><input id="settings-speed" type="range" min="2" max="30" value="10" oninput="setSpeed(this.value)"></div>
+            <div>테마</div>
+            <div>
+                <select id="settings-color" onchange="setColor(this.value)">
+                    <option value="default">기본</option>
+                    <option value="black-and-white">흑백</option>
+                    <option value="in-the-dark">어둡게</option>
+                    <option value="flashbang">눈부심</option>
+                    <option value="scarlet">적색</option>
+                </select>
+            </div>
+            <div style="margin-top: 4px;"><input id="settings-power" type="checkbox" onchange="setPowerMode(this.checked)"><label for="settings-power">전원 절약</label></div>
+            <div class="btn-close" onclick="hideSettings(false)">닫기</div>
+            <div class="btn-close" onclick="hideSettings(true)">닫고 숨기기</div>
+        </div>
+        <div id="bigboi" class="bigtext">다람쥐 헌 쳇바퀴에 타고파</div>
+        <script>
+            var bigboi = document.getElementById("bigboi");
+            var btnSettings = document.getElementById("btn-settings");
+            var paneSettings = document.getElementById("pane-settings");
+            var settingsText = document.getElementById("settings-text");
+            var settingsSpeed = document.getElementById("settings-speed");
+            var settingsColor = document.getElementById("settings-color");
+            var settingsPower = document.getElementById("settings-power");
+
+            var colors = {
+                "default": {
+                    back: null,
+                    fore: null
+                },
+                "black-and-white": {
+                    back: "black",
+                    fore: "white"
+                },
+                "in-the-dark": {
+                    back: "black",
+                    fore: "#585858"
+                },
+                "flashbang": {
+                    back: "white",
+                    fore: "black"
+                },
+                "scarlet": {
+                    back: "black",
+                    fore: "#D32F2F"
+                },
+            };
+
+            var lpos = 0;
+            var scrollSpeed = 10;
+            var renderSkipCounter = 0;
+            var renderSkipValue = 0;
+
+            var cachedBigboiWidth = 0;
+            var cachedWindowWidth = 0;
+
+            function updateScreen() {
+                if (renderSkipCounter == 0) {
+                    renderSkipCounter = renderSkipValue;
+                } else {
+                    renderSkipCounter--;
+                    window.requestAnimationFrame(updateScreen);
+                    return;
+                }
+                lpos -= scrollSpeed * (renderSkipValue + 1);
+                if (lpos < cachedBigboiWidth * -1.02) lpos = cachedWindowWidth * 1.02;
+                bigboi.style.left = lpos + "px";
+                window.requestAnimationFrame(updateScreen);
+            };
+
+            function setText(newText) {
+                if (newText.trim().length == 0) return;
+                bigboi.innerText = newText;
+            }
+            
+            function setSpeed(newSpeed) {
+                scrollSpeed = newSpeed;
+            }
+
+            function setColor(newColor) {
+                console.log(newColor);
+                var color = colors[newColor];
+                if (color === undefined) return;
+                bigboi.style.color = color.fore;
+                document.body.style.backgroundColor = color.back;
+            }
+
+            function setPowerMode(savePower) {
+                console.log(savePower);
+                renderSkipValue = (savePower == true) ? 2 : 0;
+            }
+
+            function hideSettings(shouldHideButton) {
+                paneSettings.style.visibility = "hidden";
+                btnSettings.style.visibility = "visible";
+                btnSettings.style.opacity = (shouldHideButton == true) ? "5%" : "100%";
+            }
+
+            function showSettings() {
+                paneSettings.style.visibility = "visible";
+                btnSettings.style.visibility = "hidden";
+            }
+
+            function updateMetricsCache() {
+                cachedWindowWidth = document.body.clientWidth;
+                cachedBigboiWidth = bigboi.clientWidth;
+            }
+
+            settingsText.value = "다람쥐 헌 쳇바퀴에 타고파";
+            settingsSpeed.value = 10;
+            settingsColor.value = "default";
+            settingsPower.checked = false;
+            updateMetricsCache();
+            window.requestAnimationFrame(updateScreen);
+
+            // optimized resize event
+            // https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event#requestanimationframe_customevent (minimized)
+            !function(e,n,i){i=i||window;var t=!1;i.addEventListener(e,function(){t||(t=!0,requestAnimationFrame(function(){i.dispatchEvent(new CustomEvent(n)),t=!1}))})}("resize","optimizedResize");
+            window.addEventListener("optimizedResize", updateMetricsCache);
+        </script>
+    </body>
+</html>

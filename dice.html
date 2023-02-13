@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>주사위</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="주사위" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/dice.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            .fullscreen {
+                position: absolute;
+                top: 16px;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .fullscreen#screen-dice {
+                visibility: hidden;
+            }
+            .dice-count-title {
+                font-size: 20px;
+                margin-bottom: 16px;
+                user-select: none;
+            }
+            .dice-count-button {
+                width: 144px;
+                height: 144px;
+                margin: 4px;
+                font-size: 48px;
+                background-color: rgb(72, 72, 144);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 16px;
+                cursor: pointer;
+                user-select: none;
+            }
+            .dice-container {
+                width: 360px;
+                padding-bottom: 56px;
+                text-align: center;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .die {
+                width: 120px;
+                height: 120px;
+                margin: 12px;
+                font-size: 48px;
+                background-color: rgb(222, 222, 222);
+                color: black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 16px;
+                user-select: none;
+            }
+            .pick-button-holder {
+                position: absolute;
+                bottom: 32px;
+            }
+            .button {
+                text-align: center;
+                margin-top: 8px;
+                font-size: 24px;
+                border-radius: 25px;
+                background-color: rgb(72, 72, 144);
+                padding: 14px 38px;
+                cursor: pointer;
+                user-select: none;
+            }
+            .answer-spin {
+                animation: spin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            @keyframes spin {
+                from {
+                    transform: rotate(0.005turn) scale(1.075);
+                }
+
+                to {
+                    transform: rotate(0turn) scale(1);
+                }
+            }
+            .answer-rspin {
+                animation: rspin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            @keyframes rspin {
+                from {
+                    transform: rotate(-0.005turn) scale(1.075);
+                }
+
+                to {
+                    transform: rotate(0turn) scale(1);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="fullscreen" id="screen-count">
+            <div class="dice-count-title">몇 개의 주사위를 던질까요?</div>
+            <table>
+                <tr>
+                    <td><div class="dice-count-button" onclick="goDice(1);">1</div></td>
+                    <td><div class="dice-count-button" onclick="goDice(2);">2</div></td>
+                </tr>
+                <tr>
+                    <td><div class="dice-count-button" onclick="goDice(3);">3</div></td>
+                    <td><div class="dice-count-button" onclick="goDice(4);">4</div></td>
+                </tr>
+                <tr>
+                    <td><div class="dice-count-button" onclick="goDice(5);">5</div></td>
+                    <td><div class="dice-count-button" onclick="goDice(6);">6</div></td>
+                </tr>
+            </table>
+        </div>
+        <div class="fullscreen" id="screen-dice">
+            <div class="dice-container">
+                <div class="die" id="die-1">🎲</div>
+                <div class="die" id="die-2">🎲</div>
+                <div class="die" id="die-3">🎲</div>
+                <div class="die" id="die-4">🎲</div>
+                <div class="die" id="die-5">🎲</div>
+                <div class="die" id="die-6">🎲</div>
+            </div>
+            <div class="pick-button-holder">
+                <div class="button" onclick="rollDice()">굴려요</div>
+                <div class="button" onclick="backToCount()">돌아가기</div>
+            </div>
+        </div>
+        <script>
+            var diceCount = 0;
+
+            var countScreen = document.getElementById("screen-count");
+            var diceScreen = document.getElementById("screen-dice");
+
+            var dice = [
+                document.getElementById("die-1"),
+                document.getElementById("die-2"),
+                document.getElementById("die-3"),
+                document.getElementById("die-4"),
+                document.getElementById("die-5"),
+                document.getElementById("die-6")
+            ]
+
+            var diceSymbol = [ "·","· ·","···",": :",":·:",":::" ]
+
+            function goDice(count) {
+                diceCount = count;
+                countScreen.style.visibility = "hidden";
+                diceScreen.style.visibility = "visible";
+
+                for (let i = 0; i < dice.length; i++) {
+                    dice[i].style.display = "none";
+                    dice[i].style.fontSize = "48px";
+                    dice[i].classList.remove("answer-spin");
+                    dice[i].classList.remove("answer-rspin");
+                    dice[i].innerText = "🎲";
+                }
+
+                for (let i = 0; i < diceCount; i++) dice[i].style.display = "flex";
+            }
+
+            function rollDice() {
+                for (let i = 0; i < diceCount; i++) {
+                    var rv = Math.floor(Math.random() * 6);
+                    dice[i].style.fontSize = "80px";
+                    dice[i].style.color = (rv == 0 ? "crimson" : "black");
+                    dice[i].innerText = diceSymbol[rv];
+                    
+                    var spindir = (Math.random() > 0.5 ? "answer-spin" : "answer-rspin");
+                    dice[i].classList.remove("answer-spin");
+                    dice[i].classList.remove("answer-rspin");
+                    dice[i].offsetWidth;
+                    dice[i].classList.add(spindir);
+                }
+            }
+
+            function backToCount() {
+                countScreen.style.visibility = "visible";
+                diceScreen.style.visibility = "hidden";
+            }
+        </script>
+    </body>
+</html>

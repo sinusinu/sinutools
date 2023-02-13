@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>빙글빙글</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="빙글빙글" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/spinarrow.png">
+        <meta property="og:updated_time" content="1667910929" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            :root {
+                --arrow-degree: 0
+            }
+            body {
+                text-align: center;
+                overflow: hidden;
+            }
+            .settings {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                z-index: 1;
+                user-select: none;
+            }
+            #settings-pane {
+                visibility: hidden;
+            }
+            .btn-settings {
+                font-size: 32px;
+                cursor: pointer;
+                opacity: 30%;
+            }
+            .arrow-container {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #arrow {
+                margin-top: -32px;
+                font-size: 20vh;
+                width: 26vh;
+                height: 26vh;
+            }
+            .arrow-spin {
+                animation: spin 1s cubic-bezier(.08,.82,.17,1) forwards;
+            }
+            @keyframes spin {
+                from {
+                    transform: rotate(-360deg);
+                }
+
+                to {
+                    transform: rotate(var(--arrow-degree));
+                }
+            }
+            .spin-button {
+                position: absolute;
+                bottom: 32px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 4vh;
+                border-radius: 25px;
+                background-color: rgb(72, 72, 144);
+                padding: 12px 32px;
+                cursor: pointer;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="settings">
+            <tr>
+                <td><div class="btn-settings" onclick="toggleSettings()">⚙️</div></td>
+                <td><div id="settings-pane">
+                    <input type="radio" id="angle-all" name="angle" value="all" checked>
+                    <label for="angle-all">전방위</label>
+                    <input type="radio" id="angle-4way" name="angle" value="4way">
+                    <label for="angle-4way">4방향</label>
+                    <input type="radio" id="angle-8way" name="angle" value="8way">
+                    <label for="angle-8way">8방향</label>
+                </div></td>
+            </tr>
+        </table>
+        <div class="arrow-container"><div id="arrow"><img class="arrow-image" id="arrow-image" src="up_arrow.svg"></div></div>
+        <div class="spin-button" id="spin-button" onclick="spin()">돌려요</div>
+        <script>
+            var r = document.querySelector(":root");
+            var arrow = document.getElementById("arrow-image")
+            var st = document.getElementById("settings-pane");
+            var stAll = document.getElementById("angle-all");
+            var stFour = document.getElementById("angle-4way");
+            var stEight = document.getElementById("angle-8way");
+            
+            function spin() {
+                var rv = Math.random();
+                var angle = 0;
+                if (stFour.checked) {
+                    angle = Math.floor(rv * 4) * 90;
+                } else if (stEight.checked) {
+                    angle = Math.floor(rv * 8) * 45;
+                } else {
+                    angle = Math.floor(rv * 360);
+                }
+                r.style.setProperty("--arrow-degree", angle + "deg");
+                
+                arrow.classList.remove("arrow-spin");
+                arrow.offsetWidth;
+                arrow.classList.add("arrow-spin");
+            }
+
+            function toggleSettings() {
+                if (st.style.visibility == "visible") st.style.visibility = "hidden";
+                else st.style.visibility = "visible";
+            }
+
+            if (Math.floor(Math.random() * 100) == 77) {
+                document.getElementById("spin-button").innerText = "돌려줘요";
+            }
+        </script>
+    </body>
+</html>

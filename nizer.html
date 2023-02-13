@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>N-아이저</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="N-아이저" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/nizer.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            html, body {
+                width: 100%;
+                overflow-x: hidden;
+                text-align: center;
+            }
+            .vbox {
+                display: flex;
+                flex-direction: column;
+                min-width: 320px;
+                max-width: 720px;
+                width: 80%;
+                margin: auto;
+            }
+            .buttons {
+                padding: 24px;
+                user-select: none;
+            }
+            .button {
+                padding: 16px 32px 16px 32px;
+                border-radius: 8px;
+                background-color: rgb(88, 88, 176);
+                cursor: pointer;
+            }
+            .sep {
+                padding-left: 36px;
+            }
+            textarea {
+                background-color: rgb(44, 44, 88);
+                color: white;
+                border: 0;
+                resize: none;
+                min-height: 50px;
+                max-height: 200px;
+            }
+            textarea::placeholder {
+                color: rgb(176, 176, 255);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="vbox">
+            <div>\n as escaped text</div>
+            <textarea id="ta_escaped" oninput="resizeTextarea(this)" placeholder="Hello\nworld!"></textarea>
+            <div class="buttons">
+                <span class="button" onclick="esToLb()">▼</span>
+                <span class="sep"></span>
+                <span class="button" onclick="lbToEs()">▲</span>
+            </div>
+            <textarea id="ta_linebreak" oninput="resizeTextarea(this)" placeholder="Hello
+world!"></textarea>
+            <div>\n as line break</div>
+        </div>
+        <script>
+            var taEscaped = document.getElementById("ta_escaped");
+            var taLineBreak = document.getElementById("ta_linebreak");
+
+            function resizeTextarea(element) {
+                element.style.height = "5px";
+                element.style.height = (element.scrollHeight)+"px";
+            }
+
+            function esToLb() {
+                var t = taEscaped.value;
+                t = t.replaceAll("\\n", "\n")
+                taLineBreak.value = t;
+                resizeTextarea(taLineBreak);
+            }
+
+            function lbToEs() {
+                var t = taLineBreak.value;
+                t = t.replaceAll("\n", "\\n")
+                taEscaped.value = t;
+                resizeTextarea(taEscaped);
+            }
+
+            (function() {
+                taEscaped.value = "";
+                taLineBreak.value = "";
+                resizeTextarea(taEscaped);
+                resizeTextarea(taLineBreak);
+            })();
+        </script>
+    </body>
+</html>

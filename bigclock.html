@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>큰시계</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="큰시계" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/bigclock.png">
+        <meta property="og:updated_time" content="1644486137" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            body {
+                text-align: center;
+                overflow: hidden;
+                user-select: none;
+            }
+            #clock {
+                width: 100%;
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 12vw;
+            }
+            .settings {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+            }
+            #settings-pane {
+                visibility: hidden;
+            }
+            .btn-settings {
+                font-size: 32px;
+                cursor: pointer;
+                opacity: 30%;
+            }
+            table {
+                vertical-align: top;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="settings">
+            <tr>
+                <td><div class="btn-settings" onclick="toggleSettings()">⚙️</div></td>
+                <td><div id="settings-pane">
+                    <input type="checkbox" id="settings-ampm" onclick="updateTime()" checked>
+                    <label for="settings-ampm">12시간제 사용</label>
+                    <input type="checkbox" id="settings-sec" onclick="updateTime()" checked>
+                    <label for="settings-sec">초 표시</label>
+                    <input type="checkbox" id="settings-ddf" onclick="updateDdf()">
+                    <label for="settings-ddf">어둡게</label>
+                </div></td>
+            </tr>
+        </table>
+        <div id="clock"></div>
+        <script>
+            var clk = document.getElementById("clock");
+            var st = document.getElementById("settings-pane");
+            var iid = setInterval(updateTime, 500);
+
+            var stAmpm = document.getElementById("settings-ampm");
+            var stSec = document.getElementById("settings-sec");
+            
+            var ddf = document.getElementById("settings-ddf");
+
+            function updateTime() {
+                var date = new Date();
+
+                var str = ":" + zeropad(date.getMinutes());
+                if (stAmpm.checked) {
+                    if (date.getHours() < 12) {
+                        str = "오전 " + date.getHours() + str;
+                    } else if (date.getHours() == 12) {
+                        str = "오후 12" + str;
+                    } else {
+                        str = "오후 " + (date.getHours() - 12) + str;
+                    }
+                } else {
+                    str = date.getHours() + str;
+                }
+                if (stSec.checked) str = str + ":" + zeropad(date.getSeconds());
+                
+                clk.innerText = str;
+            }
+
+            function zeropad(num) {
+                var s = "00" + num;
+                return s.substr(s.length-2);
+            }
+
+            function toggleSettings() {
+                if (st.style.visibility == "visible") st.style.visibility = "hidden";
+                else st.style.visibility = "visible";
+            }
+
+            function updateDdf() {
+                if (ddf.checked) {
+                    document.body.style.background = 'black';
+                    clk.style.color = '#585858';
+                } else {
+                    document.body.style.background = 'rgb(22, 22, 44)';
+                    clk.style.color = null;
+                }
+            }
+
+            ddf.checked = false;
+
+            updateTime();
+        </script>
+    </body>
+</html>
