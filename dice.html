@@ -153,7 +153,7 @@
                 document.getElementById("die-6")
             ]
 
-            var diceSymbol = [ "·","· ·","···",": :",":·:",":::" ]
+            var diceSymbol = [ "1","2","3","4","5","6" ]
 
             function goDice(count) {
                 diceCount = count;
@@ -174,7 +174,7 @@
             function rollDice() {
                 for (let i = 0; i < diceCount; i++) {
                     var rv = Math.floor(Math.random() * 6);
-                    dice[i].style.fontSize = "80px";
+                    dice[i].style.fontSize = "56px";
                     dice[i].style.color = (rv == 0 ? "crimson" : "black");
                     dice[i].innerText = diceSymbol[rv];
                     
