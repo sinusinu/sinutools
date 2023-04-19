@@ -59,7 +59,7 @@
     </head>
     <body>
         <div class="vbox">
-            <textarea id="ta_input" oninput="resizeTextarea(this)" placeholder="여기에 텍스트를 입력하고 아래 버튼을 누르면"></textarea>
+            <textarea id="ta_input" oninput="resizeTextarea(this)" placeholder="여기에 아무거나 입력하고 아래 버튼을 누르면"></textarea>
             <div class="buttons">
                 <span class="button" onclick="fry(0)">Base64 encode</span>
                 <span class="button" onclick="fry(1)">Base64 decode</span>
@@ -68,7 +68,7 @@
                 <span class="button" onclick="fry(2)">CRC-32 hash</span>
                 <span class="button" onclick="fry(3)">MD5 hash</span>
             </div>
-            <textarea id="ta_output" readonly placeholder="여기에 결과가 출력됩니다"></textarea>
+            <textarea id="ta_output" readonly placeholder="여기에 결과가 나와요"></textarea>
         </div>
         <script>
             var taInput = document.getElementById("ta_input");
