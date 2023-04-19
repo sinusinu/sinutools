@@ -64,7 +64,7 @@
         <div id="btn-settings" class="btn-settings" onclick="showSettings()">⚙️</div>
         <div id="pane-settings" class="pane-settings">
             <div>텍스트</div>
-            <div><input id="settings-text" type="text" value="다람쥐 헌 쳇바퀴에 타고파" oninput="setText(this.value)"></div>
+            <div><input id="settings-text" type="text" value="흐르는큰글" oninput="setText(this.value)"></div>
             <div style="height: 8px"></div>
             <div>스크롤 속도</div>
             <div><input id="settings-speed" type="range" min="2" max="30" value="10" oninput="setSpeed(this.value)"></div>
@@ -123,6 +123,11 @@
             var cachedBigboiWidth = 0;
             var cachedWindowWidth = 0;
 
+            var isTextDynamic = false;
+            var dynamicTextList = [];
+            var activeUpdateFunctionRunnerId = -1;
+            var regexDynamicToken = /\$\([^)\n]*\)/gm;
+
             function updateScreen() {
                 if (renderSkipCounter == 0) {
                     renderSkipCounter = renderSkipValue;
@@ -138,8 +143,59 @@
             };
 
             function setText(newText) {
-                if (newText.trim().length == 0) return;
-                bigboi.innerText = newText;
+                if (newText.trim().length == 0) {
+                    return;
+                }
+                
+                if (newText.match(regexDynamicToken)) {
+                    var ntSplit = newText.split(regexDynamicToken);
+                    var ntTokens = [...newText.matchAll(regexDynamicToken)];
+                    dynamicTextList = [];
+                    for (var i = 0; i < ntSplit.length; i++) {
+                        dynamicTextList.push(ntSplit[i]);
+                        if (i < ntTokens.length) dynamicTextList.push(ntTokens[i][0]);
+                    }
+
+                    updateText();
+                    if (!isTextDynamic) activeUpdateFunctionRunnerId = window.setInterval(updateText, 1000);
+                    isTextDynamic = true;
+                } else {
+                    if (isTextDynamic) clearInterval(activeUpdateFunctionRunnerId);
+                    isTextDynamic = false;
+                    bigboi.innerText = newText;
+                    updateMetricsCache();
+                }
+            }
+            
+            function updateText() {
+                var expandedDynamicText = "";
+                for (var i = 0; i < dynamicTextList.length; i++) {
+                    if (dynamicTextList[i].startsWith("$(")) {
+                        var tokens = dynamicTextList[i].substr(2, dynamicTextList[i].length - 3).split(":");
+                        if (tokens.length == 0) {
+                            expandedDynamicText = expandedDynamicText + "🤔";
+                            continue;
+                        }
+                        switch (tokens[0]) {
+                            case "time":
+                                if (tokens.length == 1) {
+                                    // no more tokens, just add current date with default toLocaleString
+                                    expandedDynamicText = expandedDynamicText + new Date().toLocaleString();
+                                } else {
+                                    // use additional token to format time
+                                    expandedDynamicText = expandedDynamicText + formatDate(tokens[1]);
+                                }
+                                break;
+                            default:
+                                expandedDynamicText = expandedDynamicText + "🤔";
+                                break;
+                        }
+                    } else {
+                        expandedDynamicText = expandedDynamicText + dynamicTextList[i];
+                    }
+                }
+                bigboi.innerText = expandedDynamicText;
+                updateMetricsCache();
             }
             
             function setSpeed(newSpeed) {
@@ -173,6 +229,33 @@
             function updateMetricsCache() {
                 cachedWindowWidth = document.body.clientWidth;
                 cachedBigboiWidth = bigboi.clientWidth;
+            }
+
+            // i know, i don't care, go away
+            function formatDate(format) {
+                var now = new Date();
+                var ret = format;
+                if (ret.includes("%Y"))  ret = ret.replaceAll("%Y",  now.getFullYear().toString().padStart(4, '0'));
+                if (ret.includes("%y"))  ret = ret.replaceAll("%y",  now.getFullYear().toString().padStart(2, '0'));
+                if (ret.includes("%m"))  ret = ret.replaceAll("%m",  now.getMonth().toString().padStart(2, '0'));
+                if (ret.includes("%-m")) ret = ret.replaceAll("%-m", now.getMonth().toString());
+                if (ret.includes("%d"))  ret = ret.replaceAll("%d",  now.getDate().toString().padStart(2, '0'));
+                if (ret.includes("%-d")) ret = ret.replaceAll("%-d", now.getDate().toString());
+                if (ret.includes("%a"))  ret = ret.replaceAll("%a",  ["월", "화", "수", "목", "금", "토", "일"][now.getDay()]);
+                if (ret.includes("%A"))  ret = ret.replaceAll("%A",  ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"][now.getDay()]);
+                if (ret.includes("%p"))  ret = ret.replaceAll("%p",  (now.getHours() < 12 ? "오전" : "오후"));
+                if (ret.includes("%H"))  ret = ret.replaceAll("%H",  now.getHours().toString().padStart(2, '0'));
+                if (ret.includes("%-H")) ret = ret.replaceAll("%-H", now.getHours().toString());
+                if (ret.includes("%I"))  ret = ret.replaceAll("%I",  (now.getHours() == 12 ? 12 : now.getHours() % 12).toString().padStart(2, '0'));
+                if (ret.includes("%-I")) ret = ret.replaceAll("%-I", (now.getHours() == 12 ? 12 : now.getHours() % 12).toString());
+                if (ret.includes("%M"))  ret = ret.replaceAll("%M",  now.getMinutes().toString().padStart(2, '0'));
+                if (ret.includes("%-M")) ret = ret.replaceAll("%-M", now.getMinutes().toString());
+                if (ret.includes("%S"))  ret = ret.replaceAll("%S",  now.getSeconds().toString().padStart(2, '0'));
+                if (ret.includes("%-S")) ret = ret.replaceAll("%-S", now.getSeconds().toString());
+                if (ret.includes("%c"))  ret = ret.replaceAll("%c",  now.toLocaleString());
+                if (ret.includes("%x"))  ret = ret.replaceAll("%x",  now.toLocaleDateString());
+                if (ret.includes("%X"))  ret = ret.replaceAll("%X",  now.toLocaleTimeString());
+                return ret;
             }
 
             settingsText.value = "흐르는큰글";
