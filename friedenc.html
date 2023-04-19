@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>글볶음</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="글볶음" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="thumbnails/nizer.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            html, body {
+                width: 100%;
+                overflow-x: hidden;
+                text-align: center;
+            }
+            .vbox {
+                display: flex;
+                flex-direction: column;
+                min-width: 320px;
+                max-width: 720px;
+                width: 80%;
+                margin: auto;
+            }
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                padding: 16px 24px 0px 24px;
+                user-select: none;
+            }
+            .button {
+                padding: 12px 24px 12px 24px;
+                margin-left: 6px;
+                margin-right: 6px;
+                border-radius: 8px;
+                background-color: rgb(88, 88, 176);
+                flex-grow: 1;
+                cursor: pointer;
+            }
+            textarea {
+                background-color: rgb(44, 44, 88);
+                color: white;
+                border: 0;
+                resize: none;
+                min-height: 50px;
+                max-height: 200px;
+            }
+            textarea#ta_output {
+                margin-top: 16px;
+            }
+            textarea::placeholder {
+                color: rgb(176, 176, 255);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="vbox">
+            <textarea id="ta_input" oninput="resizeTextarea(this)" placeholder="여기에 텍스트를 입력하고 아래 버튼을 누르면"></textarea>
+            <div class="buttons">
+                <span class="button" onclick="fry(0)">Base64 encode</span>
+                <span class="button" onclick="fry(1)">Base64 decode</span>
+            </div>
+            <div class="buttons">
+                <span class="button" onclick="fry(2)">CRC-32 hash</span>
+                <span class="button" onclick="fry(3)">MD5 hash</span>
+            </div>
+            <textarea id="ta_output" readonly placeholder="여기에 결과가 출력됩니다"></textarea>
+        </div>
+        <script>
+            var taInput = document.getElementById("ta_input");
+            var taOutput = document.getElementById("ta_output");
+
+            var fryingMethods = [ fb64e, fb64d, fcrc32, fmd5 ];
+
+            function resizeTextarea(element) {
+                element.style.height = "5px";
+                element.style.height = (element.scrollHeight)+"px";
+            }
+
+            function fry(method) {
+                var t = taInput.value;
+                taOutput.value = fryingMethods[method](t);
+                resizeTextarea(taOutput);
+            }
+
+            function fb64e(src) {
+                return base64EncArr(strToUTF8Arr(src));
+            }
+
+            function fb64d(src) {
+                try { return UTF8ArrToStr(base64DecToArr(src)); }
+                catch { return "[오류]"; }
+            }
+
+            function fcrc32(src) {
+                return crc32(src).toString(16);
+            }
+
+            function fmd5(src) {
+                return md5(src);
+            }
+
+            //#region Copy-minify-pasted codes
+
+            // UTF-8 Base64: https://developer.mozilla.org/en-US/docs/Glossary/Base64#solution_2_%E2%80%93_rewriting_atob_and_btoa_using_typedarrays_and_utf-8
+            function b64ToUint6(t){return t>64&&t<91?t-65:t>96&&t<123?t-71:t>47&&t<58?t+4:43===t?62:47===t?63:0}function base64DecToArr(t,n){const r=t.replace(/[^A-Za-z0-9+/]/g,""),o=r.length,e=n?Math.ceil((3*o+1>>2)/n)*n:3*o+1>>2,i=new Uint8Array(e);let l,u,c=0,f=0;for(let t=0;t<o;t++)if(u=3&t,c|=b64ToUint6(r.charCodeAt(t))<<6*(3-u),3===u||o-t==1){for(l=0;l<3&&f<e;)i[f]=c>>>(16>>>l&24)&255,l++,f++;c=0}return i}function uint6ToB64(t){return t<26?t+65:t<52?t+71:t<62?t-4:62===t?43:63===t?47:65}function base64EncArr(t){let n=2,r="";const o=t.length;let e=0;for(let i=0;i<o;i++)n=i%3,e|=t[i]<<(16>>>n&24),2!==n&&t.length-i!=1||(r+=String.fromCodePoint(uint6ToB64(e>>>18&63),uint6ToB64(e>>>12&63),uint6ToB64(e>>>6&63),uint6ToB64(63&e)),e=0);return r.substring(0,r.length-2+n)+(2===n?"":1===n?"=":"==")}function UTF8ArrToStr(t){let n,r="";const o=t.length;for(let e=0;e<o;e++)n=t[e],r+=String.fromCodePoint(n>251&&n<254&&e+5<o?1073741824*(n-252)+(t[++e]-128<<24)+(t[++e]-128<<18)+(t[++e]-128<<12)+(t[++e]-128<<6)+t[++e]-128:n>247&&n<252&&e+4<o?(n-248<<24)+(t[++e]-128<<18)+(t[++e]-128<<12)+(t[++e]-128<<6)+t[++e]-128:n>239&&n<248&&e+3<o?(n-240<<18)+(t[++e]-128<<12)+(t[++e]-128<<6)+t[++e]-128:n>223&&n<240&&e+2<o?(n-224<<12)+(t[++e]-128<<6)+t[++e]-128:n>191&&n<224&&e+1<o?(n-192<<6)+t[++e]-128:n);return r}function strToUTF8Arr(t){let n,r;const o=t.length;let e=0;for(let n=0;n<o;n++)r=t.codePointAt(n),r>=65536&&n++,e+=r<128?1:r<2048?2:r<65536?3:r<2097152?4:r<67108864?5:6;n=new Uint8Array(e);let i=0,l=0;for(;i<e;)r=t.codePointAt(l),r<128?n[i++]=r:r<2048?(n[i++]=192+(r>>>6),n[i++]=128+(63&r)):r<65536?(n[i++]=224+(r>>>12),n[i++]=128+(r>>>6&63),n[i++]=128+(63&r)):r<2097152?(n[i++]=240+(r>>>18),n[i++]=128+(r>>>12&63),n[i++]=128+(r>>>6&63),n[i++]=128+(63&r),l++):r<67108864?(n[i++]=248+(r>>>24),n[i++]=128+(r>>>18&63),n[i++]=128+(r>>>12&63),n[i++]=128+(r>>>6&63),n[i++]=128+(63&r),l++):(n[i++]=252+(r>>>30),n[i++]=128+(r>>>24&63),n[i++]=128+(r>>>18&63),n[i++]=128+(r>>>12&63),n[i++]=128+(r>>>6&63),n[i++]=128+(63&r),l++),l++;return n}
+
+            // CRC32: https://stackoverflow.com/a/18639999/18465413
+            var makeCRCTable=function(){for(var r,a=[],e=0;e<256;e++){r=e;for(var c=0;c<8;c++)r=1&r?3988292384^r>>>1:r>>>1;a[e]=r}return a},crc32=function(r){for(var a=window.crcTable||(window.crcTable=makeCRCTable()),e=-1,c=0;c<r.length;c++)e=e>>>8^a[255&(e^r.charCodeAt(c))];return(-1^e)>>>0};
+
+            // MD5: https://stackoverflow.com/a/60467595/18465413
+            function md5(n){var r="0123456789abcdef";function t(n){var t,u="";for(t=0;t<=3;t++)u+=r.charAt(n>>8*t+4&15)+r.charAt(n>>8*t&15);return u}function u(n,r){var t=(65535&n)+(65535&r);return(n>>16)+(r>>16)+(t>>16)<<16|65535&t}function e(n,r,t,e,f,o){return u(function(n,r){return n<<r|n>>>32-r}(u(u(r,n),u(e,o)),f),t)}function f(n,r,t,u,f,o,c){return e(r&t|~r&u,n,r,f,o,c)}function o(n,r,t,u,f,o,c){return e(r&u|t&~u,n,r,f,o,c)}function c(n,r,t,u,f,o,c){return e(r^t^u,n,r,f,o,c)}function a(n,r,t,u,f,o,c){return e(t^(r|~u),n,r,f,o,c)}var i,h,v,g,l,A=function(n){var r,t=1+(n.length+8>>6),u=new Array(16*t);for(r=0;r<16*t;r++)u[r]=0;for(r=0;r<n.length;r++)u[r>>2]|=n.charCodeAt(r)<<r%4*8;return u[r>>2]|=128<<r%4*8,u[16*t-2]=8*n.length,u}(""+n),d=1732584193,b=-271733879,m=-1732584194,w=271733878;for(i=0;i<A.length;i+=16)h=d,v=b,g=m,l=w,d=f(d,b,m,w,A[i+0],7,-680876936),w=f(w,d,b,m,A[i+1],12,-389564586),m=f(m,w,d,b,A[i+2],17,606105819),b=f(b,m,w,d,A[i+3],22,-1044525330),d=f(d,b,m,w,A[i+4],7,-176418897),w=f(w,d,b,m,A[i+5],12,1200080426),m=f(m,w,d,b,A[i+6],17,-1473231341),b=f(b,m,w,d,A[i+7],22,-45705983),d=f(d,b,m,w,A[i+8],7,1770035416),w=f(w,d,b,m,A[i+9],12,-1958414417),m=f(m,w,d,b,A[i+10],17,-42063),b=f(b,m,w,d,A[i+11],22,-1990404162),d=f(d,b,m,w,A[i+12],7,1804603682),w=f(w,d,b,m,A[i+13],12,-40341101),m=f(m,w,d,b,A[i+14],17,-1502002290),d=o(d,b=f(b,m,w,d,A[i+15],22,1236535329),m,w,A[i+1],5,-165796510),w=o(w,d,b,m,A[i+6],9,-1069501632),m=o(m,w,d,b,A[i+11],14,643717713),b=o(b,m,w,d,A[i+0],20,-373897302),d=o(d,b,m,w,A[i+5],5,-701558691),w=o(w,d,b,m,A[i+10],9,38016083),m=o(m,w,d,b,A[i+15],14,-660478335),b=o(b,m,w,d,A[i+4],20,-405537848),d=o(d,b,m,w,A[i+9],5,568446438),w=o(w,d,b,m,A[i+14],9,-1019803690),m=o(m,w,d,b,A[i+3],14,-187363961),b=o(b,m,w,d,A[i+8],20,1163531501),d=o(d,b,m,w,A[i+13],5,-1444681467),w=o(w,d,b,m,A[i+2],9,-51403784),m=o(m,w,d,b,A[i+7],14,1735328473),d=c(d,b=o(b,m,w,d,A[i+12],20,-1926607734),m,w,A[i+5],4,-378558),w=c(w,d,b,m,A[i+8],11,-2022574463),m=c(m,w,d,b,A[i+11],16,1839030562),b=c(b,m,w,d,A[i+14],23,-35309556),d=c(d,b,m,w,A[i+1],4,-1530992060),w=c(w,d,b,m,A[i+4],11,1272893353),m=c(m,w,d,b,A[i+7],16,-155497632),b=c(b,m,w,d,A[i+10],23,-1094730640),d=c(d,b,m,w,A[i+13],4,681279174),w=c(w,d,b,m,A[i+0],11,-358537222),m=c(m,w,d,b,A[i+3],16,-722521979),b=c(b,m,w,d,A[i+6],23,76029189),d=c(d,b,m,w,A[i+9],4,-640364487),w=c(w,d,b,m,A[i+12],11,-421815835),m=c(m,w,d,b,A[i+15],16,530742520),d=a(d,b=c(b,m,w,d,A[i+2],23,-995338651),m,w,A[i+0],6,-198630844),w=a(w,d,b,m,A[i+7],10,1126891415),m=a(m,w,d,b,A[i+14],15,-1416354905),b=a(b,m,w,d,A[i+5],21,-57434055),d=a(d,b,m,w,A[i+12],6,1700485571),w=a(w,d,b,m,A[i+3],10,-1894986606),m=a(m,w,d,b,A[i+10],15,-1051523),b=a(b,m,w,d,A[i+1],21,-2054922799),d=a(d,b,m,w,A[i+8],6,1873313359),w=a(w,d,b,m,A[i+15],10,-30611744),m=a(m,w,d,b,A[i+6],15,-1560198380),b=a(b,m,w,d,A[i+13],21,1309151649),d=a(d,b,m,w,A[i+4],6,-145523070),w=a(w,d,b,m,A[i+11],10,-1120210379),m=a(m,w,d,b,A[i+2],15,718787259),b=a(b,m,w,d,A[i+9],21,-343485551),d=u(d,h),b=u(b,v),m=u(m,g),w=u(w,l);return t(d)+t(b)+t(m)+t(w)}
+
+            //#endregion
+
+            (function() {
+                taInput.value = "";
+                taOutput.value = "";
+                resizeTextarea(taInput);
+                resizeTextarea(taOutput);
+            })();
+        </script>
+    </body>
+</html>
