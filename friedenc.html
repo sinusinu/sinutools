@@ -62,8 +62,12 @@
         <div class="vbox">
             <textarea id="ta_input" oninput="resizeTextarea(this)" placeholder="여기에 아무거나 입력하고 아래 버튼을 누르면"></textarea>
             <div class="buttons">
-                <span class="button" onclick="fry(0)">Base64 encode</span>
-                <span class="button" onclick="fry(1)">Base64 decode</span>
+                <span class="button" onclick="fry(4)">Base64 encode (btoa)</span>
+                <span class="button" onclick="fry(5)">Base64 decode (atob)</span>
+            </div>
+            <div class="buttons">
+                <span class="button" onclick="fry(0)">Base64 encode (UTF-8)</span>
+                <span class="button" onclick="fry(1)">Base64 decode (UTF-8)</span>
             </div>
             <div class="buttons">
                 <span class="button" onclick="fry(2)">CRC-32 hash</span>
@@ -75,7 +79,7 @@
             var taInput = document.getElementById("ta_input");
             var taOutput = document.getElementById("ta_output");
 
-            var fryingMethods = [ fb64e, fb64d, fcrc32, fmd5 ];
+            var fryingMethods = [ fb64e, fb64d, fcrc32, fmd5, fb64el, fb64dl ];
 
             function resizeTextarea(element) {
                 element.style.height = "5px";
@@ -94,6 +98,16 @@
 
             function fb64d(src) {
                 try { return UTF8ArrToStr(base64DecToArr(src)); }
+                catch { return "[오류]"; }
+            }
+
+            function fb64el(src) {
+                try { return btoa(src); }
+                catch { return "[오류]"; }
+            }
+
+            function fb64dl(src) {
+                try { return atob(src); }
                 catch { return "[오류]"; }
             }
 
