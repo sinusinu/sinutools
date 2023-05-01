@@ -211,6 +211,11 @@
             function formatDate(format) {
                 var now = new Date();
                 var ret = format;
+                
+                // fast templates
+                if (ret.includes("!hm"))  ret = ret.replaceAll("!hm", "%-I시 %M분");
+
+                // individual tokens
                 if (ret.includes("%Y"))  ret = ret.replaceAll("%Y",  now.getFullYear().toString().padStart(4, '0'));
                 if (ret.includes("%y"))  ret = ret.replaceAll("%y",  now.getFullYear().toString().padStart(2, '0'));
                 if (ret.includes("%m"))  ret = ret.replaceAll("%m",  now.getMonth().toString().padStart(2, '0'));
