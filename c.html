@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>.</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+        </style>
+    </head>
+    <body>
+        <div id="ins">
+            <div><input type="text" id="in-addr" placeholder="Addr."></div>
+            <div><input type="password" id="in-key" placeholder="Key"></div>
+            <div><input type="button" value="Go" onclick="goConnect()"></div>
+        </div>
+        <img id="disp">
+        <script>
+            var inAddr = document.getElementById("in-addr");
+            var inKey = document.getElementById("in-key");
+            var ins = document.getElementById("ins");
+            var disp = document.getElementById("disp");
+            var thing = null;
+
+            function goConnect() {
+                thing = new WebSocket(inAddr.value);
+                thing.addEventListener('message', function(ev) {
+                    var recv = JSON.parse(ev.data);
+                    if ("hi" in recv) {
+                        var challenge = BigInt(recv["challenge"]);
+                        var keyVal = BigInt(inKey.value);
+                        var response = {
+                            "response": (challenge ^ keyVal).toString()
+                        };
+                        thing.send(JSON.stringify(response));
+                    } else if ("result" in recv) {
+                        if (recv["result"] == "success") {
+                            ins.style.display = "none";
+                        }
+                    } else if ("image" in recv) {
+                        var recvImage = recv["image"];
+                        disp.src = "data:image/webp;base64," + recvImage;
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
