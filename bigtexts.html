@@ -70,7 +70,7 @@
         </style>
     </head>
     <body>
-        <div id="btn-settings" class="btn-settings" onclick="showSettings()">⚙️</div>
+        <div id="btn-settings" class="btn-settings" tabindex="0" onclick="showSettings()" onkeydown="showSettingsKbd(event)">⚙️</div>
         <div id="pane-settings" class="pane-settings">
             <div>텍스트</div>
             <div><textarea id="settings-text" type="text" value="멈춘큰글" oninput="setText(this.value)"></textarea></div>
@@ -87,8 +87,8 @@
                     <option value="scarlet">적색</option>
                 </select>
             </div>
-            <div class="btn-close" onclick="hideSettings(false)">닫기</div>
-            <div class="btn-close" onclick="hideSettings(true)">닫고 숨기기</div>
+            <div class="btn-close" tabindex="0" onclick="hideSettings(false)" onkeydown="hideSettingsKbd(event, false)">닫기</div>
+            <div class="btn-close" tabindex="0" onclick="hideSettings(true)" onkeydown="hideSettingsKbd(event, true)">닫고 숨기기</div>
         </div>
         <div class="cont">
             <div id="bigboi" class="bigtext">멈춘큰글</div>
@@ -205,6 +205,14 @@
             function showSettings() {
                 paneSettings.style.visibility = "visible";
                 btnSettings.style.visibility = "hidden";
+            }
+
+            function hideSettingsKbd(ev, shouldHideButton) {
+                if (ev.code == "Enter" || ev.code == "Space") hideSettings(shouldHideButton);
+            }
+
+            function showSettingsKbd(ev) {
+                if (ev.code == "Enter" || ev.code == "Space") showSettings();
             }
 
             // i know, i don't care, go away
