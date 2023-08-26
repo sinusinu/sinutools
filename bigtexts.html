@@ -29,7 +29,7 @@
             .bigtext {
                 margin: 0;
                 font-size: 5vw;
-                line-height: 4.995vw;
+                line-height: 5.5vw;
                 user-select: none;
                 text-align: center;
             }
@@ -185,7 +185,7 @@
             
             function setSize(newSize) {
                 bigboi.style.fontSize = newSize + "vw";
-                bigboi.style.lineHeight = (newSize * 0.999) + "vw";
+                bigboi.style.lineHeight = (parseFloat(newSize) + 0.5) + "vw";
             }
 
             function setColor(newColor) {
