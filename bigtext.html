@@ -14,6 +14,11 @@
         <link rel="icon" href="favicon32.png">
         <link rel="stylesheet" href="common.css">
         <style>
+            :root {
+                --scroll-duration: 11s;
+                --scroll-step: 33;
+                --scroll-mode: linear;
+            }
             html, body {
                 margin: 0;
                 max-width: 100%;
@@ -25,8 +30,17 @@
                 margin: 0;
                 position: absolute;
                 top: 40%;
-                transform: translateY(-40%);
                 user-select: none;
+                animation: var(--scroll-duration) infinite scroller var(--scroll-mode);
+            }
+            @keyframes scroller {
+                from {
+                    transform: translateX(100%) translateY(-40%);
+                }
+
+                to {
+                    transform: translateX(-100%) translateY(-40%);
+                }
             }
             .chonk {
                 font-weight: bold;
@@ -70,7 +84,7 @@
             <div><input id="settings-text" type="text" value="흐르는큰글" oninput="setText(this.value)"></div>
             <div style="height: 8px"></div>
             <div>스크롤 속도</div>
-            <div><input id="settings-speed" type="range" min="2" max="30" value="10" oninput="setSpeed(this.value)"></div>
+            <div><input id="settings-speed" type="range" min="1" max="16" value="9" oninput="setSpeed(this.value)"></div>
             <div><label><input id="settings-chonk" type="checkbox" oninput="setChonk(this.checked)">두툼하게</label></div>
             <div>테마</div>
             <div>
@@ -120,32 +134,12 @@
                 },
             };
 
-            var lpos = 0;
-            var scrollSpeed = 10;
-            var renderSkipCounter = 0;
-            var renderSkipValue = 0;
-
-            var cachedBigboiWidth = 0;
-            var cachedWindowWidth = 0;
+            const cssVarCont = document.querySelector(":root");
 
             var isTextDynamic = false;
             var dynamicTextList = [];
             var activeUpdateFunctionRunnerId = -1;
             var regexDynamicToken = /\$\([^)\n]*\)/gm;
-
-            function updateScreen() {
-                if (renderSkipCounter == 0) {
-                    renderSkipCounter = renderSkipValue;
-                } else {
-                    renderSkipCounter--;
-                    window.requestAnimationFrame(updateScreen);
-                    return;
-                }
-                lpos -= scrollSpeed * (renderSkipValue + 1);
-                if (lpos < cachedBigboiWidth * -1.02) lpos = cachedWindowWidth * 1.02;
-                bigboi.style.left = lpos + "px";
-                window.requestAnimationFrame(updateScreen);
-            };
 
             function setText(newText) {
                 if (newText.trim().length == 0) {
@@ -168,7 +162,6 @@
                     if (isTextDynamic) clearInterval(activeUpdateFunctionRunnerId);
                     isTextDynamic = false;
                     bigboi.innerText = newText;
-                    updateMetricsCache();
                 }
             }
             
@@ -200,11 +193,12 @@
                     }
                 }
                 bigboi.innerText = expandedDynamicText;
-                updateMetricsCache();
             }
             
             function setSpeed(newSpeed) {
-                scrollSpeed = newSpeed;
+                var newSpeedCalc = (16 - (newSpeed - 2)) + 2;
+                cssVarCont.style.setProperty("--scroll-duration", newSpeedCalc + "s");
+                cssVarCont.style.setProperty("--scroll-step", newSpeedCalc * 3);
             }
 
             function setColor(newColor) {
@@ -217,7 +211,7 @@
 
             function setPowerMode(savePower) {
                 console.log(savePower);
-                renderSkipValue = (savePower == true) ? 2 : 0;
+                cssVarCont.style.setProperty("--scroll-mode", (savePower == true) ? "steps(var(--scroll-step))" : "linear")
             }
 
             function setChonk(isChonk) {
@@ -242,11 +236,6 @@
 
             function showSettingsKbd(ev) {
                 if (ev.code == "Enter" || ev.code == "Space") showSettings();
-            }
-
-            function updateMetricsCache() {
-                cachedWindowWidth = document.body.clientWidth;
-                cachedBigboiWidth = bigboi.clientWidth;
             }
 
             // i know, i don't care, go away
@@ -286,13 +275,6 @@
             settingsChonk.checked = false;
             settingsColor.value = "default";
             settingsPower.checked = false;
-            updateMetricsCache();
-            window.requestAnimationFrame(updateScreen);
-
-            // optimized resize event
-            // https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event#requestanimationframe_customevent (minimized)
-            !function(e,n,i){i=i||window;var t=!1;i.addEventListener(e,function(){t||(t=!0,requestAnimationFrame(function(){i.dispatchEvent(new CustomEvent(n)),t=!1}))})}("resize","optimizedResize");
-            window.addEventListener("optimizedResize", updateMetricsCache);
         </script>
     </body>
 </html>
