@@ -16,7 +16,7 @@
         <style>
             :root {
                 --scroll-duration: 11s;
-                --scroll-step: 33;
+                --scroll-step: 66;
                 --scroll-mode: linear;
             }
             html, body {
@@ -198,7 +198,7 @@
             function setSpeed(newSpeed) {
                 var newSpeedCalc = (16 - (newSpeed - 2)) + 2;
                 cssVarCont.style.setProperty("--scroll-duration", newSpeedCalc + "s");
-                cssVarCont.style.setProperty("--scroll-step", newSpeedCalc * 3);
+                cssVarCont.style.setProperty("--scroll-step", newSpeedCalc * 6);
             }
 
             function setColor(newColor) {
