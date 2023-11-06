@@ -28,6 +28,9 @@
                 transform: translateY(-40%);
                 user-select: none;
             }
+            .chonk {
+                font-weight: bold;
+            }
             .btn-settings {
                 position: absolute;
                 top: 16px;
@@ -68,6 +71,7 @@
             <div style="height: 8px"></div>
             <div>스크롤 속도</div>
             <div><input id="settings-speed" type="range" min="2" max="30" value="10" oninput="setSpeed(this.value)"></div>
+            <div><label><input id="settings-chonk" type="checkbox" oninput="setChonk(this.checked)">두툼하게</label></div>
             <div>테마</div>
             <div>
                 <select id="settings-color" onchange="setColor(this.value)">
@@ -89,6 +93,7 @@
             var paneSettings = document.getElementById("pane-settings");
             var settingsText = document.getElementById("settings-text");
             var settingsSpeed = document.getElementById("settings-speed");
+            var settingsChonk = document.getElementById("settings-chonk");
             var settingsColor = document.getElementById("settings-color");
             var settingsPower = document.getElementById("settings-power");
 
@@ -215,6 +220,11 @@
                 renderSkipValue = (savePower == true) ? 2 : 0;
             }
 
+            function setChonk(isChonk) {
+                if (isChonk) bigboi.classList.add("chonk");
+                else bigboi.classList.remove("chonk");
+            }
+
             function hideSettings(shouldHideButton) {
                 paneSettings.style.visibility = "hidden";
                 btnSettings.style.visibility = "visible";
@@ -272,7 +282,8 @@
             }
 
             settingsText.value = "흐르는큰글";
-            settingsSpeed.value = 10;
+            settingsSpeed.value = 9;
+            settingsChonk.checked = false;
             settingsColor.value = "default";
             settingsPower.checked = false;
             updateMetricsCache();

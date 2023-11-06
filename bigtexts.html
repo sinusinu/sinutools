@@ -33,6 +33,9 @@
                 user-select: none;
                 text-align: center;
             }
+            .chonk {
+                font-weight: bold;
+            }
             .btn-settings {
                 position: absolute;
                 top: 16px;
@@ -76,7 +79,8 @@
             <div><textarea id="settings-text" type="text" value="멈춘큰글" oninput="setText(this.value)"></textarea></div>
             <div style="height: 8px"></div>
             <div>크기</div>
-            <div><input id="settings-size" type="range" min="1" max="50" value="5" oninput="setSize(this.value)"></div>            
+            <div><input id="settings-size" type="range" min="1" max="50" value="5" oninput="setSize(this.value)"></div>
+            <div><label><input id="settings-chonk" type="checkbox" oninput="setChonk(this.checked)">두툼하게</label></div>
             <div>테마</div>
             <div>
                 <select id="settings-color" onchange="setColor(this.value)">
@@ -99,6 +103,7 @@
             var paneSettings = document.getElementById("pane-settings");
             var settingsText = document.getElementById("settings-text");
             var settingsSize = document.getElementById("settings-size");
+            var settingsChonk = document.getElementById("settings-chonk");
             var settingsColor = document.getElementById("settings-color");
             
             var isTextDynamic = false;
@@ -196,6 +201,11 @@
                 document.body.style.backgroundColor = color.back;
             }
 
+            function setChonk(isChonk) {
+                if (isChonk) bigboi.classList.add("chonk");
+                else bigboi.classList.remove("chonk");
+            }
+
             function hideSettings(shouldHideButton) {
                 paneSettings.style.visibility = "hidden";
                 btnSettings.style.visibility = "visible";
@@ -249,6 +259,7 @@
 
             settingsText.value = "멈춘큰글";
             settingsSize.value = 5;
+            settingsChonk.checked = false;
             settingsColor.value = "default";
         </script>
     </body>
