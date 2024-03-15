@@ -32,7 +32,7 @@
             input {
                 background: none;
                 border: none;
-                color: whitesmoke;
+                color: var(--sinutools-fgcolor);
                 text-align: center;
                 font-size: 96px;
                 width: 100%;
@@ -49,7 +49,7 @@
                 margin-top: 8px;
                 font-size: 24px;
                 border-radius: 25px;
-                background-color: rgb(72, 72, 144);
+                background-color: var(--sinutools-acccolor);
                 padding: 14px 38px;
                 cursor: pointer;
                 user-select: none;
@@ -71,32 +71,32 @@
                 font-size: 96px;
             }
             .result-anim {
-                animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+                animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
             }
             .result-anim-rotate {
-                animation: popin-rotate 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+                animation: popin-rotate 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
             }
             @keyframes popin {
                 from {
-                    color:rgb(144, 144, 255);
+                    color:var(--sinutools-accxxcolor);
                     transform: scale(0.9);
                 }
 
                 to {
-                    color:whitesmoke;
+                    color:var(--sinutools-fgcolor);
                     transform: scale(1);
                 }
             }
             @keyframes popin-rotate {
                 from {
                     rotate: 10deg;
-                    color:rgb(144, 144, 255);
+                    color:var(--sinutools-accxxcolor);
                     scale: 0.9;
                 }
 
                 to {
                     rotate: 0deg;
-                    color:whitesmoke;
+                    color:var(--sinutools-fgcolor);
                     scale: 1;
                 }
             }
