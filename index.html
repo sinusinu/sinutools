@@ -77,6 +77,7 @@
         </style>
     </head>
     <body>
+        <div id="intro" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: black; background-image: url('98.webp'); background-size: contain; background-position: center; background-repeat: no-repeat;"></div>
         <div class="index-title">시누의 잡동사니 도구들</div>
         <div class="index-subtitle">필요할 때마다 만든 시답잖은 웹앱 컬렉션</div>
         <div class="index-copyright">© 2022‑2024 sinu. All rights reserved.</div>
@@ -101,5 +102,11 @@
             <div class="index-menu-item"><a href="blackout.html"><picture><source type="image/webp" srcset="thumbnails/blackout.webp"><img class="item-thumb" src="thumbnails/blackout.png"><br/>어둠에다크</a></div>
         </div>
         <div class="index-footer"><a href="about.html">이게뭐에요</a></div>
+        <div class="index-footer"><a href="javascript:tms();">효과음도 필요해요?</a></div>
+        <audio id="tms"><source src="tms.ogg" type="audio/ogg"></audio>
+        <script>
+            var i=document.getElementById("intro");window.onload=()=>{setTimeout(()=>{i.style.backgroundImage=null;setTimeout(()=>{i.remove();},800);},1350);};
+            function tms() {var t=document.getElementById("tms");t.currentTime=0;t.play();}
+        </script>
     </body>
 </html>
