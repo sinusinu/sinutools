@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
-@font-face { font-family: 'HBIOS-SYS'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/HBIOS-SYS.woff2') format('woff2'); font-weight: normal; font-style: normal; }
+/*@import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');*/
 :root {
     /*
     --sinutools-bgcolor: rgb(22, 22, 44);
@@ -15,16 +15,16 @@
     --sinutools-accxxcolor: #1084d0;
     --sinutools-fgcolor: black;
     */
-    --sinutools-bgcolor: #008081;
-    --sinutools-acccolor: #c0c0c0;
-    --sinutools-accxcolor: linear-gradient(0.25turn, #010081, #1084d0);
-    --sinutools-accxxcolor: #1084d0;
-    --sinutools-fgcolor: black;
+    --sinutools-bgcolor: rgb(22, 22, 44);
+    --sinutools-acccolor: rgb(44, 44, 88);
+    --sinutools-accxcolor: rgb(66, 66, 176);
+    --sinutools-accxxcolor: rgb(132, 132, 255);
+    --sinutools-fgcolor: whitesmoke;
 }
 body {
     background-color: var(--sinutools-bgcolor);
     color: var(--sinutools-fgcolor);
-    font-family: 'HBIOS-SYS', 'Noto Sans KR', sans-serif;
+    font-family: /*'Galmuri9',*/ 'Noto Sans KR', sans-serif;
 }
 
 a {
