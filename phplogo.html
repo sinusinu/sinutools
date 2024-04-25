@@ -90,11 +90,9 @@
                 if (phpY + phpHeight - 6 > vpHeight) { phpdY = Math.abs(phpdY) * -1; bumpy = true; }
                 if (phpY < -6) { phpdY = Math.abs(phpdY); bumpy = true; }
 
-                if (bumpx || bumpy) {
-                    // bumped one edge, change color
-                    phpColor = (phpColor + 1) % someColors.length;
-                    phpImg.style.filter = someColors[phpColor];
-                }
+                // if (bumpx || bumpy) {
+
+                // }
 
                 if (bumpx && bumpy) {
                     // bumped corner, hooray!
@@ -105,6 +103,13 @@
 
                 window.requestAnimationFrame(render);
             };
+
+            var changeColor = function() {
+                phpColor = (phpColor + 1) % someColors.length;
+                phpImg.style.filter = someColors[phpColor];
+            }
+
+            window.setInterval(changeColor, 4000);
 
             // window resize handler
             var updateWindowSize = function() {
