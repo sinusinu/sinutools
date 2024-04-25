@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>떠다니는PHP</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="떠다니는PHP" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" itemprop="image" content="og_image.png">
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
+        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
+        <link rel="icon" href="favicon32.png">
+        <link rel="stylesheet" href="common.css">
+        <style>
+            body {
+                background-color: black;
+                overflow: hidden;
+            }
+            .php {
+                width: 15vw;
+                height: 7.95vw;
+                filter: invert(100%);
+            }
+            .speen {
+                animation: speen 2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+            }
+            @keyframes speen {
+                from { rotate: 360deg; }
+                to { rotate: 0deg; }
+            }
+            .copyright {
+                position: absolute;
+                bottom: 8px;
+                right: 8px;
+                opacity: 15%;
+            }
+        </style>
+    </head>
+    <body>
+        <img id="php" class="php" alt="PHP Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgLTEgMTAwIDUwIj4KCTxwYXRoIGQ9Im03LjU3OSAxMC4xMjMgMTQuMjA0IDBjNC4xNjkgMC4wMzUgNy4xOSAxLjIzNyA5LjA2MyAzLjYwNCAxLjg3MyAyLjM2NyAyLjQ5MSA1LjYgMS44NTUgOS42OTktMC4yNDcgMS44NzMtMC43OTUgMy43MS0xLjY0MyA1LjUxMi0wLjgxMyAxLjgwMi0xLjk0MyAzLjQyNy0zLjM5MiA0Ljg3Ni0xLjc2NyAxLjgzNy0zLjY1NyAzLjAwMy01LjY3MSAzLjQ5OC0yLjAxNCAwLjQ5NS00LjA5OSAwLjc0Mi02LjI1NCAwLjc0MmwtNi4zNiAwLTIuMDE0IDEwLjA3LTcuMzY3IDAgNy41NzktMzguMDAxIDAgMG02LjIwMSA2LjA0Mi0zLjE4IDE1LjljMC4yMTIgMC4wMzUgMC40MjQgMC4wNTMgMC42MzYgMC4wNTMgMC4yNDcgMCAwLjQ5NSAwIDAuNzQyIDAgMy4zOTIgMC4wMzUgNi4yMTktMC4zIDguNDgtMS4wMDcgMi4yNjEtMC43NDIgMy43ODEtMy4zMjEgNC41NTgtNy43MzggMC42MzYtMy43MSAwLTUuODQ4LTEuOTA4LTYuNDEzLTEuODczLTAuNTY1LTQuMjIyLTAuODMtNy4wNDktMC43OTUtMC40MjQgMC4wMzUtMC44MyAwLjA1My0xLjIxOSAwLjA1My0wLjM1MyAwLTAuNzI0IDAtMS4xMTMgMGwwLjA1My0wLjA1MyIvPgoJPHBhdGggZD0ibTQxLjA5MyAwIDcuMzE0IDAtMi4wNjcgMTAuMTIzIDYuNTcyIDBjMy42MDQgMC4wNzEgNi4yODkgMC44MTMgOC4wNTYgMi4yMjYgMS44MDIgMS40MTMgMi4zMzIgNC4wOTkgMS41OSA4LjA1NmwtMy41NTEgMTcuNjQ5LTcuNDIgMCAzLjM5Mi0xNi44NTRjMC4zNTMtMS43NjcgMC4yNDctMy4wMjEtMC4zMTgtMy43NjMtMC41NjUtMC43NDItMS43ODQtMS4xMTMtMy42NTctMS4xMTNsLTUuODgzLTAuMDUzLTQuMzQ2IDIxLjc4My03LjMxNCAwIDcuNjMyLTM4LjA1NCAwIDAiLz4KCTxwYXRoIGQ9Im03MC40MTIgMTAuMTIzIDE0LjIwNCAwYzQuMTY5IDAuMDM1IDcuMTkgMS4yMzcgOS4wNjMgMy42MDQgMS44NzMgMi4zNjcgMi40OTEgNS42IDEuODU1IDkuNjk5LTAuMjQ3IDEuODczLTAuNzk1IDMuNzEtMS42NDMgNS41MTItMC44MTMgMS44MDItMS45NDMgMy40MjctMy4zOTIgNC44NzYtMS43NjcgMS44MzctMy42NTcgMy4wMDMtNS42NzEgMy40OTgtMi4wMTQgMC40OTUtNC4wOTkgMC43NDItNi4yNTQgMC43NDJsLTYuMzYgMC0yLjAxNCAxMC4wNy03LjM2NyAwIDcuNTc5LTM4LjAwMSAwIDBtNi4yMDEgNi4wNDItMy4xOCAxNS45YzAuMjEyIDAuMDM1IDAuNDI0IDAuMDUzIDAuNjM2IDAuMDUzIDAuMjQ3IDAgMC40OTUgMCAwLjc0MiAwIDMuMzkyIDAuMDM1IDYuMjE5LTAuMyA4LjQ4LTEuMDA3IDIuMjYxLTAuNzQyIDMuNzgxLTMuMzIxIDQuNTU4LTcuNzM4IDAuNjM2LTMuNzEgMC01Ljg0OC0xLjkwOC02LjQxMy0xLjg3My0wLjU2NS00LjIyMi0wLjgzLTcuMDQ5LTAuNzk1LTAuNDI0IDAuMDM1LTAuODMgMC4wNTMtMS4yMTkgMC4wNTMtMC4zNTMgMC0wLjcyNCAwLTEuMTEzIDBsMC4wNTMtMC4wNTMiLz4KPC9zdmc+Cg==" />
+        <div class="copyright">PHP Logo © Colin Viebrock, used under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div>
+        <script>
+            var randomBoolean = function() { return Math.random() > 0.5 }
+
+            var someColors = [
+                "invert(84%) sepia(20%) saturate(359%)  hue-rotate(107deg) brightness(90%) contrast(85%)",
+                "invert(42%) sepia(24%) saturate(384%)  hue-rotate(65deg)  brightness(95%) contrast(87%)",
+                "invert(45%) sepia(34%) saturate(462%)  hue-rotate(240deg) brightness(91%) contrast(89%)",
+                "invert(95%) sepia(14%) saturate(6588%) hue-rotate(320deg) brightness(95%) contrast(83%)",
+                "invert(49%) sepia(7%)  saturate(1236%) hue-rotate(177deg) brightness(98%) contrast(83%)",
+                "invert(66%) sepia(95%) saturate(562%)  hue-rotate(152deg) brightness(81%) contrast(85%)",
+                "invert(72%) sepia(70%) saturate(370%)  hue-rotate(48deg)  brightness(99%) contrast(91%)",
+                "invert(33%) sepia(79%) saturate(1004%) hue-rotate(216deg) brightness(90%) contrast(90%)",
+                "invert(64%) sepia(16%) saturate(1366%) hue-rotate(114deg) brightness(89%) contrast(83%)",
+                "invert(38%) sepia(18%) saturate(1888%) hue-rotate(233deg) brightness(97%) contrast(91%)",
+                "invert(48%) sepia(42%) saturate(249%)  hue-rotate(3deg)   brightness(99%) contrast(89%)",
+                "invert(56%) sepia(60%) saturate(592%)  hue-rotate(182deg) brightness(94%) contrast(95%)",
+                "invert(18%) sepia(75%) saturate(2971%) hue-rotate(236deg) brightness(93%) contrast(92%)",
+            ];
+
+            var phpImg = document.getElementById("php");
+            var phpWidth = phpImg.clientWidth;
+            var phpHeight = phpImg.clientHeight;
+            var vpWidth = window.innerWidth;
+            var vpHeight = window.innerHeight;
+
+            var phpX = Math.random() * (vpWidth - phpWidth);
+            var phpY = Math.random() * (vpHeight - phpHeight);
+            var phpdX = (Math.random() * 3 + 1) * (randomBoolean() ? 1 : -1);
+            var phpdY = (Math.random() * 2 + 1) * (randomBoolean() ? 1 : -1);
+            var phpColor = Math.floor(Math.random() * someColors.length);
+            phpImg.style.filter = someColors[phpColor];
+
+            phpImg.style.position = "absolute";
+
+            var render = function() {
+                phpImg.style.left = phpX + "px";
+                phpImg.style.top = phpY + "px";
+
+                phpX = phpX + phpdX;
+                phpY = phpY + phpdY;
+
+                var bumpx = false;
+                var bumpy = false;
+
+                if (phpX + phpWidth - 11 > vpWidth) { phpdX = Math.abs(phpdX) * -1; bumpx = true; }
+                if (phpX < 0) { phpdX = Math.abs(phpdX); bumpx = true; }
+                if (phpY + phpHeight - 6 > vpHeight) { phpdY = Math.abs(phpdY) * -1; bumpy = true; }
+                if (phpY < -6) { phpdY = Math.abs(phpdY); bumpy = true; }
+
+                if (bumpx || bumpy) {
+                    // bumped one edge, change color
+                    phpColor = (phpColor + 1) % someColors.length;
+                    phpImg.style.filter = someColors[phpColor];
+                }
+
+                if (bumpx && bumpy) {
+                    // bumped corner, hooray!
+                    phpImg.classList.remove("speen");
+                    phpImg.offsetWidth;
+                    phpImg.classList.add("speen");
+                }
+
+                window.requestAnimationFrame(render);
+            };
+
+            // window resize handler
+            var updateWindowSize = function() {
+                vpWidth = window.innerWidth;
+                vpHeight = window.innerHeight;
+            };
+
+            // optimized resize event
+            // https://developer.mozilla.org/ko/docs/Web/API/Window/resize_event#requestanimationframe_customevent (minimized)
+            !function(e,n,i){i=i||window;var t=!1;i.addEventListener(e,function(){t||(t=!0,requestAnimationFrame(function(){i.dispatchEvent(new CustomEvent(n)),t=!1}))})}("resize","optimizedResize");
+            window.addEventListener("optimizedResize", updateWindowSize);
+
+            render();
+        </script>
+    </body>
+</html>
