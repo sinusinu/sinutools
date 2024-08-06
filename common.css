@@ -1,32 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
 /*@import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');*/
-:root {
-    /*
-    --sinutools-bgcolor: rgb(22, 22, 44);
-    --sinutools-acccolor: rgb(44, 44, 88);
-    --sinutools-accxcolor: rgb(66, 66, 176);
-    --sinutools-accxxcolor: rgb(132, 132, 255);
-    --sinutools-fgcolor: whitesmoke;
-    */
-    /*
-    --sinutools-bgcolor: #008081;
-    --sinutools-acccolor: #c0c0c0;
-    --sinutools-accxcolor: linear-gradient(0.25turn, #010081, #1084d0);
-    --sinutools-accxxcolor: #1084d0;
-    --sinutools-fgcolor: black;
-    */
-    --sinutools-bgcolor: rgb(22, 22, 44);
-    --sinutools-acccolor: rgb(44, 44, 88);
-    --sinutools-accxcolor: rgb(66, 66, 176);
-    --sinutools-accxxcolor: rgb(132, 132, 255);
-    --sinutools-fgcolor: whitesmoke;
+@media (prefers-color-scheme: light) {
+    :root {
+        --sinutools-bgcolor: whitesmoke;
+        --sinutools-acccolor: rgb(211, 211, 233);
+        --sinutools-accxcolor: rgb(167, 167, 211);
+        --sinutools-accxxcolor: rgb(79, 79, 189);
+        --sinutools-fgcolor: rgb(22, 22, 44);
+    }
 }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --sinutools-bgcolor: rgb(22, 22, 44);
+        --sinutools-acccolor: rgb(44, 44, 88);
+        --sinutools-accxcolor: rgb(66, 66, 176);
+        --sinutools-accxxcolor: rgb(132, 132, 255);
+        --sinutools-fgcolor: whitesmoke;
+    }
+}
+
 body {
     background-color: var(--sinutools-bgcolor);
     color: var(--sinutools-fgcolor);
-    font-family: /*'Galmuri9',*/ 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
 }
-
 a {
     color: var(--sinutools-fgcolor);
 }
