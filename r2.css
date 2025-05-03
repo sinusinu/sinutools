@@ -6,6 +6,7 @@
     --sinutools-accxcolor: rgb(129, 129, 129);
 }
 body {
+    height: 100%;
     background-color: var(--sinutools-bgcolor);
     color: var(--sinutools-fgcolor);
     font-family: 'Pretendard', sans-serif;
