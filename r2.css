@@ -1,0 +1,12 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
+:root {
+    --sinutools-bgcolor: rgb(22, 22, 22);
+    --sinutools-fgcolor: rgb(245, 245, 245);
+    --sinutools-acccolor: rgb(79, 79, 79);
+    --sinutools-accxcolor: rgb(129, 129, 129);
+}
+body {
+    background-color: var(--sinutools-bgcolor);
+    color: var(--sinutools-fgcolor);
+    font-family: 'Pretendard', sans-serif;
+}

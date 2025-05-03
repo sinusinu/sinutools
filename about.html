@@ -6,14 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="시누의 잡동사니 도구들" />
         <meta property="og:description" content="필요할 때마다 만든 시답잖은 웹앱 컬렉션" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" itemprop="image" content="thumbnails/index.png">
-        <meta property="og:updated_time" content="1733241539" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
         <meta name="description" content="시누가 필요할 때마다 만든 시답잖은 웹앱 컬렉션을 둘러보세요! 추적, 광고, 조건 등 아무것도 없이 자유롭게 사용 가능합니다.">
-        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
-        <link rel="icon" href="favicon32.png">
-        <link rel="stylesheet" href="common.css">
+        <link rel="stylesheet" href="r2.css">
         <style>
             body {
                 text-align: center;
@@ -34,10 +28,13 @@
             td.table-head {
                 background: var(--sinutools-accxcolor);
             }
+            a {
+                color: var(--sinutools-fgcolor)
+            }
         </style>
     </head>
     <body>
-        <div style="font-size: 24px; margin-bottom: 8px;">─ 시누의 잡동사니 도구들 ─</div>
+        <div style="font-size: 24px; margin-bottom: 8px;">« 시누의 잡동사니 도구들 »</div>
         <div style="font-size: 16px; margin-bottom: 12px;">필요할 때마다 만든 시답잖은 웹앱 컬렉션</div>
         <div id="table-container">
             <table>
@@ -51,84 +48,55 @@
                 </tr>
                 <tr>
                     <td>예니오</td>
-                    <td>랜덤으로 예 또는 아니오 고르기</td>
+                    <td>예 또는 아니오</td>
                 </tr>
                 <tr>
                     <td>빙글빙글</td>
-                    <td>랜덤한 방향을 가리키는 화살표</td>
+                    <td>랜덤한 방향의 화살표</td>
                 </tr>
-                <!--
-                <tr>
-                    <td>카운터</td>
-                    <td>수를 셀 수 있는 버튼형 카운터</td>
-                </tr>
-                -->
                 <tr>
                     <td>원픽</td>
-                    <td>여러 항목 중 하나를 랜덤으로 고르기</td>
+                    <td>여러가지 중 하나 랜덤 선택</td>
                 </tr>
                 <tr>
                     <td>주사위</td>
                     <td>1~6개의 주사위</td>
                 </tr>
                 <tr>
-                    <td>메트로놈</td>
-                    <td>조금 이상한 메트로놈</td>
-                </tr>
-                <tr>
                     <td>랜덤숫자</td>
-                    <td>범위 내에서 랜덤한 정수 고르기</td>
+                    <td>범위 내의 랜덤한 숫자 고르기</td>
                 </tr>
                 <tr>
                     <td>제비뽑기</td>
                     <td>제비 무더기에서 하나 뽑기</td>
-                </tr>
-                <!--
-                <tr>
-                    <td>알록달록</td>
-                    <td>색상을 값으로 변환</td>
-                </tr>
-                <tr>
-                    <td>빕키</td>
-                    <td>작은 사인파 키보드</td>
-                </tr>
-                -->
-                <tr>
-                    <td>N-아이저</td>
-                    <td>라인 피드를 빠르게 떼고 붙이는 도구</td>
-                </tr>
-                <tr>
-                    <td>흐르는큰글</td>
-                    <td>오른쪽에서 왼쪽으로 흐르는 큰 글 전광판</td>
                 </tr>
                 <tr>
                     <td>멈춘큰글</td>
                     <td>재미없게 표시되는 큰 글 전광판</td>
                 </tr>
                 <tr>
+                    <td>흐르는큰글</td>
+                    <td>옆으로 흐르는 큰 글 전광판</td>
+                </tr>
+                <tr>
                     <td>어둠에다크</td>
                     <td>전체화면으로 쓰기 좋은 검정</td>
                 </tr>
-                <!--
-                <tr>
-                    <td>떠다니는PHP</td>
-                    <td>어느 모임에서 종종 튀어나오는 농담거리</td>
-                </tr>
-                -->
             </table>
         </div>
-        <div style="font-size: 24px; margin: 16px;">─ 사용 조건 ─</div>
+        <div style="font-size: 24px; margin: 16px;">« 사용권 및 안내 »</div>
         <div>
-            <div>시누의 잡동사니 도구들은 개인, 기업, 기관 등 상관없이</div>
-            <div>누구나 자유롭게 사용 가능합니다.</div>
+            <div>시누의 잡동사니 도구들은</div>
+            <div>① 개인, 기업, 기관 등 상관없이 자유롭게 사용 가능합니다.</div>
+            <div>② 어떤 추적 도구도 사용하지 않습니다.</div>
+            <div>③ (아직까지는) 광고가 없습니다.</div>
         </div>
-        <div style="font-size: 24px; margin: 16px;">─ 오픈 소스 라이선스 ─</div>
+        <div style="font-size: 24px; margin: 16px;">« 오픈 소스 라이선스 »</div>
         <div>
             <div>본 프로젝트는 MIT 라이선스 하에 배포됩니다.</div>
-            <div style="margin-top: 12px;">본 프로젝트는 <a href="https://twemoji.twitter.com/">Twemoji</a>를 일부 변형하여 이미지 리소스로 사용하고 있습니다.</div>
+            <div style="margin-top: 12px;">본 프로젝트는 <a href="https://twemoji.twitter.com/">Twemoji</a>를 일부 변형하여 사용하고 있습니다.</div>
             <div>Twemoji는 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 하에 사용되었습니다.</div>
         </div>
         <div style="margin: 26px; font-size: 14px;"><a href="privacy.html">개인정보처리방침</a></div>
-        <div style="font-size: 14px;"><a href="index.html">돌아가기</a></div>
     </body>
 </html>

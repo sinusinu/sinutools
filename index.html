@@ -1,110 +1,94 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>시누의 잡동사니 도구들</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta property="og:title" content="시누의 잡동사니 도구들" />
-        <meta property="og:description" content="필요할 때마다 만든 시답잖은 웹앱 컬렉션" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" itemprop="image" content="thumbnails/index.png">
-        <meta property="og:updated_time" content="1733241539" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16162c">
-        <meta name="description" content="시누가 필요할 때마다 만든 시답잖은 웹앱 컬렉션을 둘러보세요! 추적, 광고, 조건 등 아무것도 없이 자유롭게 사용 가능합니다.">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicon144.png">
-        <link rel="apple-touch-icon-precomposed" href="favicon57.png">
-        <link rel="icon" href="favicon32.png">
-        <link rel="stylesheet" href="common.css">
-        <style>
-            body {
-                margin: 16px;
-                text-align: center;
-                user-select: none;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시누의 잡동사니 도구들</title>
+    <meta property="og:title" content="시누의 잡동사니 도구들" />
+    <meta property="og:description" content="필요할 때마다 만든 시답잖은 웹앱 컬렉션" />
+    <link rel="apple-touch-icon-precomposed" href="favicon.png">
+    <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" href="r2.css">
+    <style>
+        @media (orientation: portrait) {
+            :root {
+                --body-pad: 12px;
+                --launcher-hpad: 0px;
+                --icon-vpad: 2.5vh;
+                --icon-size: 14vw;
+                --column-count: 4;
             }
-            .index-title {
-                font-size: 24px;
-                margin-bottom: 4px;
+        }
+        @media (orientation: landscape) {
+            :root {
+                --body-pad: 24px;
+                --launcher-hpad: 8vw;
+                --icon-vpad: 2vh;
+                --icon-size: 14vh;
+                --column-count: 6;
             }
-            .index-subtitle {
-                font-size: 16px;
-                margin-bottom: 4px;
-            }
-            .index-footer {
-                font-size: 16px;
-                margin-top: 12px;
-            }
-            .index-table {
-                table-layout: fixed;
-                border-collapse: separate;
-                border: 3px solid var(--sinutools-acccolor);
-                background-color: var(--sinutools-acccolor);
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 16px;
-                font-size: 14px;
-            }
-            .index-table td {
-                border: 3px solid var(--sinutools-acccolor);
-            }
-            .index-table a {
-                text-decoration: none;
-            }
-            .item-thumb {
-                width: 140px;
-            }
-            .index-copyright {
-                margin-top: 4px;
-                font-size: 12px;
-            }
-            .index-menu-container {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 16px;
-                font-size: 14px;
-                max-width: 460px;
-            }
-            .index-menu-item {
-                border: 3px solid var(--sinutools-acccolor);
-                background-color: var(--sinutools-acccolor);
-                padding: 3px;
-            }
-            .index-menu-item a {
-                text-decoration: none;
-            }
-            .footer-separator {
-                display: inline-block;
-                width: 24px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="index-title">시누의 잡동사니 도구들</div>
-        <div class="index-subtitle">필요할 때마다 만든 시답잖은 웹앱 컬렉션</div>
-        <div class="index-copyright">© 2022‑2024 sinu. All rights reserved.</div>
-        <div class="index-menu-container">
-            <!-- Hello source dwellers! Commented tools are delisted; you can still access them by going to their addresses directly. -->
-            <!-- 소스를 보고 계시는군요! 주석 처리된 게시 중지 도구들은 주소를 직접 입력하여 접근하실 수 있습니다. -->
-            <div class="index-menu-item" title="화면 가득 차는 큰 시계"><a href="bigclock.html"><picture><source type="image/webp" srcset="thumbnails/bigclock.webp"><img class="item-thumb" src="thumbnails/bigclock.png"></picture><br/>큰시계</a></div>
-            <div class="index-menu-item" title="랜덤으로 예 또는 아니오 고르기"><a href="yesno.html"><picture><source type="image/webp" srcset="thumbnails/yesno.webp"><img class="item-thumb" src="thumbnails/yesno.png"></picture><br/>예니오</a></div>
-            <div class="index-menu-item" title="랜덤한 방향을 가리키는 화살표"><a href="spinarrow.html"><picture><source type="image/webp" srcset="thumbnails/spinarrow.webp"><img class="item-thumb" src="thumbnails/spinarrow.png"><br/>빙글빙글</a></div>
-            <!--<div class="index-menu-item" title="수를 셀 수 있는 버튼형 카운터"><a href="counter.html"><picture><source type="image/webp" srcset="thumbnails/counter.webp"><img class="item-thumb" src="thumbnails/counter.png"><br/>카운터</a></div>-->
-            <div class="index-menu-item" title="여러 항목 중 하나를 랜덤으로 고르기"><a href="onepick.html"><picture><source type="image/webp" srcset="thumbnails/onepick.webp"><img class="item-thumb" src="thumbnails/onepick.png"><br/>원픽</a></div>
-            <div class="index-menu-item" title="1~6개의 주사위"><a href="dice.html"><picture><source type="image/webp" srcset="thumbnails/dice.webp"><img class="item-thumb" src="thumbnails/dice.png"><br/>주사위</a></div>
-            <div class="index-menu-item" title="조금 이상한 메트로놈"><a href="metronome.html"><picture><source type="image/webp" srcset="thumbnails/metronome.webp"><img class="item-thumb" src="thumbnails/metronome.png"><br/>메트로놈</a></div>
-            <div class="index-menu-item" title="범위 내에서 랜덤한 정수 고르기"><a href="rng.html"><picture><source type="image/webp" srcset="thumbnails/rng.webp"><img class="item-thumb" src="thumbnails/rng.png"><br/>랜덤숫자</a></div>
-            <div class="index-menu-item" title="제비 무더기에서 하나 뽑기"><a href="drawlots.html"><picture><source type="image/webp" srcset="thumbnails/drawlots.webp"><img class="item-thumb" src="thumbnails/drawlots.png"><br/>제비뽑기</a></div>
-            <!--<div class="index-menu-item" title="색상을 값으로 변환"><a href="colorpic.html"><picture><source type="image/webp" srcset="thumbnails/colorpic.webp"><img class="item-thumb" src="thumbnails/colorpic.png"><br/>알록달록</a></div>-->
-            <!--<div class="index-menu-item" title="작은 사인파 키보드"><a href="beepkeys.html"><picture><source type="image/webp" srcset="thumbnails/beepkeys.webp"><img class="item-thumb" src="thumbnails/beepkeys.png"><br/>빕키</a></div>-->
-            <div class="index-menu-item" title="라인 피드를 빠르게 떼고 붙이는 도구"><a href="nizer.html"><picture><source type="image/webp" srcset="thumbnails/nizer.webp"><img class="item-thumb" src="thumbnails/nizer.png"><br/>N-아이저</a></div>
-            <div class="index-menu-item" title="오른쪽에서 왼쪽으로 흐르는 큰 글 전광판"><a href="bigtext.html"><picture><source type="image/webp" srcset="thumbnails/bigtext.webp"><img class="item-thumb" src="thumbnails/bigtext.png"><br/>흐르는큰글</a></div>
-            <div class="index-menu-item" title="재미없게 표시되는 큰 글 전광판"><a href="bigtexts.html"><picture><source type="image/webp" srcset="thumbnails/bigtexts.webp"><img class="item-thumb" src="thumbnails/bigtexts.png"><br/>멈춘큰글</a></div>
-            <div class="index-menu-item" title="전체화면으로 쓰기 좋은 검정"><a href="blackout.html"><picture><source type="image/webp" srcset="thumbnails/blackout.webp"><img class="item-thumb" src="thumbnails/blackout.png"><br/>어둠에다크</a></div>
-            <!--<div class="index-menu-item" title="어느 모임에서 종종 튀어나오는 농담거리"><a href="phplogo.html"><picture><source type="image/webp" srcset="thumbnails/phplogo.webp"><img class="item-thumb" src="thumbnails/phplogo.png"><br/>떠다니는PHP</a></div>-->
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        body {
+            padding: var(--body-pad);
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .index-home {
+            flex-grow: 1;
+            padding: 16px var(--launcher-hpad);
+        }
+        .index-launcher {
+            display: grid;
+            grid-template-columns: repeat(var(--column-count), 1fr);
+        }
+        .index-launcher-item {
+            text-align: center;
+            padding: var(--icon-vpad) 0;
+        }
+        .index-launcher-title {
+            padding-top: 1.5vh;
+            font-size: 16px;
+            text-wrap: nowrap;
+        }
+        .item-icon {
+            background-color: rgb(55, 55, 55);
+            border-radius: 24px;
+            width: var(--icon-size);
+            height: var(--icon-size);
+        }
+        a {
+            text-decoration: none;
+            color: var(--sinutools-fgcolor);
+        }
+    </style>
+</head>
+<body>
+    <div class="index-home">
+        <div class="index-launcher">
+            <div class="index-launcher-item"><a href="bigclock.html"><img class="item-icon" src="icons/bigclock.png"><br/><div class="index-launcher-title">큰시계</div></a></div>
+            <div class="index-launcher-item"><a href="yesno.html"><img class="item-icon" src="icons/yesno.png"><br/><div class="index-launcher-title">예니오</div></a></div>
+            <div class="index-launcher-item"><a href="spinarrow.html"><img class="item-icon" src="icons/spinarrow.png"><br/><div class="index-launcher-title">빙글빙글</div></a></div>
+            <div class="index-launcher-item"><a href="onepick.html"><img class="item-icon" src="icons/onepick.png"><br/><div class="index-launcher-title">원픽</div></a></div>
+            <div class="index-launcher-item"><a href="dice.html"><img class="item-icon" src="icons/dice.png"><br/><div class="index-launcher-title">주사위</div></a></div>
+            <div class="index-launcher-item"><a href="rng.html"><img class="item-icon" src="icons/rng.png"><br/><div class="index-launcher-title">랜덤숫자</div></a></div>
+            <div class="index-launcher-item"><a href="drawlots.html"><img class="item-icon" src="icons/drawlots.png"><br/><div class="index-launcher-title">제비뽑기</div></a></div>
+            <div class="index-launcher-item"><a href="bigtexts.html"><img class="item-icon" src="icons/bigtexts.png"><br/><div class="index-launcher-title">멈춘큰글</div></a></div>
+            <div class="index-launcher-item"><a href="bigtext.html"><img class="item-icon" src="icons/bigtext.png"><br/><div class="index-launcher-title">흐르는큰글</div></a></div>
+            <div class="index-launcher-item"><a href="blackout.html"><img class="item-icon" src="icons/blackout.png"><br/><div class="index-launcher-title">어둠에다크</div></a></div>
         </div>
-        <div class="index-footer"><a href="about.html">이게뭐에요</a><span class="footer-separator"></span><a href="https://github.com/sinusinu/sinutools">어케만들었어요</a></div>
-    </body>
+    </div>
+    <div class="index-info">
+        <a href="about.html">
+            <div class="index-title">시누의 잡동사니 도구들 R2</div>
+            <div class="index-copyright">© 2022‑2024, 2025 sinu. All rights reserved.</div>
+        </a>
+    </div>
+</body>
 </html>
