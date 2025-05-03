@@ -16,6 +16,7 @@
                 --launcher-hpad: 0px;
                 --icon-vpad: 2.5vh;
                 --icon-size: 14vw;
+                --icon-border-radius: 12px;
                 --column-count: 4;
             }
         }
@@ -25,6 +26,7 @@
                 --launcher-hpad: 8vw;
                 --icon-vpad: 2vh;
                 --icon-size: 14vh;
+                --icon-border-radius: 20px;
                 --column-count: 6;
             }
         }
@@ -59,7 +61,7 @@
         }
         .item-icon {
             background-color: rgb(55, 55, 55);
-            border-radius: 24px;
+            border-radius: var(--icon-border-radius);
             width: var(--icon-size);
             height: var(--icon-size);
         }
