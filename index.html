@@ -69,9 +69,46 @@
             text-decoration: none;
             color: var(--sinutools-fgcolor);
         }
+        .launch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,1);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .launch-overlay.active {
+            opacity: 1;
+        }
+        .launching {
+            position: fixed;
+            z-index: 1000;
+            animation: launch 0.4s cubic-bezier(.13,.64,0,1) forwards;
+            object-fit: none;
+        }
+        @keyframes launch {
+            0% {
+                position: fixed;
+                background-color: rgb(55, 55, 55);
+            }
+            100% {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                background-color: var(--sinutools-bgcolor);
+            }
+        }
     </style>
 </head>
-<body>
+<body onunload="">
+    <div class="launch-overlay"></div>
     <div class="index-home">
         <div class="index-launcher">
             <div class="index-launcher-item"><a href="bigclock.html"><img class="item-icon" src="icons/bigclock.png"><br/><div class="index-launcher-title">큰시계</div></a></div>
@@ -91,5 +128,33 @@
         <div class="index-title">시누의 잡동사니 도구들</div>
         <div class="index-copyright">© 2022‑2025 sinu. All rights reserved.</div>
     </div>
+    <script>
+        document.querySelectorAll('.index-launcher-item a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const icon = this.querySelector('img');
+                const href = this.href;
+                const rect = icon.getBoundingClientRect();
+                const overlay = document.querySelector('.launch-overlay');
+                
+                // Create clone for animation
+                const clone = icon.cloneNode(true);
+                clone.style.top = rect.top + 'px';
+                clone.style.left = rect.left + 'px';
+                clone.style.width = rect.width + 'px';
+                clone.style.height = rect.height + 'px';
+                clone.classList.add('launching');
+                
+                document.body.appendChild(clone);
+                overlay.classList.add('active');
+                
+                // Navigate after animation
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 300);
+            });
+        });
+    </script>
 </body>
 </html>
