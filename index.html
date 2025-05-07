@@ -86,13 +86,17 @@
         .launching {
             position: fixed;
             z-index: 1000;
-            animation: launch 0.4s cubic-bezier(.13,.64,0,1) forwards;
+            animation: launch 0.4s cubic-bezier(.36,.97,.26,1) forwards;
             object-fit: none;
         }
         @keyframes launch {
             0% {
                 position: fixed;
                 background-color: rgb(55, 55, 55);
+                border-radius: var(--icon-border-radius);
+            }
+            50% {
+                background-color: var(--sinutools-bgcolor);
             }
             100% {
                 position: absolute;
@@ -103,6 +107,7 @@
                 width: 100%;
                 height: 100%;
                 background-color: var(--sinutools-bgcolor);
+                border-radius: 0px;
             }
         }
     </style>
