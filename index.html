@@ -112,8 +112,8 @@
         }
     </style>
 </head>
-<body onunload="">
-    <div class="launch-overlay"></div>
+<body onpagehide="resetZoom()">
+    <div id="launch-overlay" class="launch-overlay"></div>
     <div class="index-home">
         <div class="index-launcher">
             <div class="index-launcher-item"><a href="bigclock.html"><img class="item-icon" src="icons/bigclock.png"><br/><div class="index-launcher-title">큰시계</div></a></div>
@@ -160,6 +160,12 @@
                 }, 300);
             });
         });
+
+        function resetZoom() {
+            var zooms = document.getElementsByClassName('launching');
+            for (var i = 0; i < zooms.length; i++) zooms[i].remove();
+            document.getElementById('launch-overlay').classList.remove('active');
+        }
     </script>
 </body>
 </html>
