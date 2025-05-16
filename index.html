@@ -135,6 +135,8 @@
         <div class="index-copyright">© 2022‑2025 sinu. All rights reserved.</div>
     </div>
     <script>
+        var navEvent = -1;
+
         document.querySelectorAll('.index-launcher-item a').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -154,9 +156,11 @@
                 
                 document.body.appendChild(clone);
                 overlay.classList.add('active');
+
+                history.pushState({}, "");
                 
                 // Navigate after animation
-                setTimeout(() => {
+                navEvent = setTimeout(() => {
                     window.location.href = href;
                 }, 300);
             });
@@ -167,6 +171,12 @@
             for (var i = 0; i < zooms.length; i++) zooms[i].remove();
             document.getElementById('launch-overlay').classList.remove('active');
         }
+
+        window.addEventListener("popstate", function(event) {
+            clearTimeout(navEvent);
+            resetZoom();
+        });
+
     </script>
 </body>
 </html>
