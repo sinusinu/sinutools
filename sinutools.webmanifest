@@ -1,0 +1,17 @@
+{
+    "name": "시누의 잡동사니 도구들",
+    "short_name": "시잡도",
+    "theme_color": "#161616",
+    "background_color": "#161616",
+    "start_url": "./",
+    "id": "sinutools",
+    "display": "standalone",
+    "scope": "./",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "type": "imgae/png",
+            "sizes": "144x144"
+        }
+    ]
+}
