@@ -140,6 +140,9 @@
 
         document.querySelectorAll('.index-launcher-item a').forEach(link => {
             link.addEventListener('click', function(e) {
+                // do not show zoom animation if prefers-reduced-motion is set
+                if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches == false) return;
+
                 e.preventDefault();
                 
                 const icon = this.querySelector('img');
