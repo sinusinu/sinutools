@@ -88,7 +88,7 @@
         .launching {
             position: fixed;
             z-index: 1000;
-            animation: launch 0.4s cubic-bezier(.36,.97,.26,1) forwards;
+            animation: launch 0.35s cubic-bezier(.36,.97,.26,1) forwards;
             object-fit: none;
         }
         @keyframes launch {
@@ -166,7 +166,7 @@
                 // Navigate after animation
                 navEvent = setTimeout(() => {
                     window.location.href = href;
-                }, 300);
+                }, 250);
             });
         });
 
