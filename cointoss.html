@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>동전던지기 - 시누의 잡동사니 도구들</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="동전던지기" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <link rel="manifest" href="./sinutools.webmanifest">
+        <link rel="apple-touch-icon-precomposed" href="favicon.png">
+        <link rel="icon" href="favicon.png">
+        <link rel="stylesheet" href="r2.css">
+        <style>
+            :root {
+                --anim-translate: 0.0;
+                --anim-flip: 0.0deg;
+            }
+            body {
+                text-align: center;
+                overflow: hidden;
+                user-select: none;
+            }
+            .cointoss-container {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .coin {
+                transform: translateY(calc(var(--anim-translate) * -80vh)) scaleX(calc(1 + (var(--anim-translate) * 0.75))) rotateX(var(--anim-flip));
+            }
+            .cointoss-anim {
+                animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+            }
+            .cointoss-button {
+                position: absolute;
+                bottom: 32px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 5vh;
+                border-radius: 25px;
+                background-color: var(--sinutools-acccolor);
+                padding: 14px 38px;
+                cursor: pointer;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="cointoss-container">
+            <div class="coin" id="coin">
+                <svg id="coin-head" width="200" height="200" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="90" fill="silver" stroke="#ccc" stroke-width="5" />
+                    <circle cx="100" cy="100" r="70" fill="#e0e0e0" stroke="#aaa" stroke-width="3" />
+                    <text x="100" y="105" font-size="64" text-anchor="middle" dominant-baseline="middle">🕊️</text>
+                </svg>
+                <svg id="coin-tail" width="200" height="200" viewBox="0 0 200 200" style="display: none;">
+                    <circle cx="100" cy="100" r="90" fill="silver" stroke="#ccc" stroke-width="5" />
+                    <circle cx="100" cy="100" r="70" fill="#e0e0e0" stroke="#aaa" stroke-width="3" />
+                    <text x="100" y="116" font-size="48" font-weight="bold" text-anchor="middle" fill="#555" font-family="monospace">500</text>
+                </svg>
+                <svg id="coin-amb" width="200" height="200" viewBox="0 0 200 200" style="display: none;">
+                    <circle cx="100" cy="100" r="90" fill="silver" stroke="#ccc" stroke-width="5" />
+                    <circle cx="100" cy="100" r="70" fill="#e0e0e0" stroke="#aaa" stroke-width="3" />
+                </svg>
+            </div>
+        </div>
+        <div class="cointoss-button" onclick="toss()">던져요</div>
+        <script>
+            const animDuration = 700;
+
+            var coinHead = document.getElementById("coin-head");
+            var coinTail = document.getElementById("coin-tail");
+            var coinAmb = document.getElementById("coin-amb");
+
+            var last = 0;
+            var animTime = 0;
+
+            function toss() {
+                if (animTime > 0) return;
+
+                animTime = animDuration;
+                last = new Date().getTime();
+                showAmb();
+                requestAnimationFrame(updateAnim);
+            }
+
+            function showHead() { coinHead.style.display = "block"; coinTail.style.display = "none"; coinAmb.style.display = "none"; }
+            function showTail() { coinHead.style.display = "none"; coinTail.style.display = "block"; coinAmb.style.display = "none"; }
+            function showAmb() { coinHead.style.display = "none"; coinTail.style.display = "none"; coinAmb.style.display = "block"; }
+
+            function updateAnim() {
+                var now = new Date().getTime();
+                var delta = now - last;
+                last = now;
+
+                animTime -= delta;
+
+                var tossPos = Math.sin(Math.pow(animTime / animDuration, 1.5) * Math.PI);
+                var tossRot = 3240 * Math.pow(animTime / animDuration, 1.5);
+
+                if (animTime < 0) {
+                    document.documentElement.style.setProperty("--anim-translate", "0.0");
+                    document.documentElement.style.setProperty("--anim-flip", "0deg");
+                    animTime = 0;
+                    if (Math.random() > 0.5) showHead(); else showTail();
+                } else {
+                    document.documentElement.style.setProperty("--anim-translate", tossPos);
+                    document.documentElement.style.setProperty("--anim-flip", tossRot + "deg");
+                    requestAnimationFrame(updateAnim);
+                }
+            }
+        </script>
+    </body>
+</html>
