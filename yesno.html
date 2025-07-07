@@ -32,6 +32,11 @@
             .answer-anim {
                 animation: popin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
             }
+            @media (prefers-reduced-motion: reduce) {
+                .answer-anim {
+                    animation: popin 0s step-end forwards;
+                }
+            }
             @keyframes popin {
                 from {
                     color:var(--sinutools-acccolor);

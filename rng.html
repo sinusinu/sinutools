@@ -73,6 +73,14 @@
             .result-anim-rotate {
                 animation: popin-rotate 0.5s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
             }
+            @media (prefers-reduced-motion: reduce) {
+                .result-anim {
+                    animation: popin 0s step-end forwards;
+                }
+                .result-anim-rotate {
+                    animation: popin-rotate 0s step-end forwards;
+                }
+            }
             @keyframes popin {
                 from {
                     color:var(--sinutools-accxxcolor);

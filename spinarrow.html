@@ -52,6 +52,11 @@
             .arrow-spin {
                 animation: spin 1s cubic-bezier(.08,.82,.17,1) forwards;
             }
+            @media (prefers-reduced-motion: reduce) {
+                .arrow-spin {
+                    animation: spin 0s step-end forwards;
+                }
+            }
             @keyframes spin {
                 from {
                     transform: rotate(-360deg);

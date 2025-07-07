@@ -81,6 +81,17 @@
             .answer-spin {
                 animation: spin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
             }
+            .answer-rspin {
+                animation: rspin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .answer-spin {
+                    animation: spin 0s step-end;
+                }
+                .answer-rspin {
+                    animation: rspin 0s step-end;
+                }
+            }
             @keyframes spin {
                 from {
                     transform: rotate(0.005turn) scale(1.075);
@@ -89,9 +100,6 @@
                 to {
                     transform: rotate(0turn) scale(1);
                 }
-            }
-            .answer-rspin {
-                animation: rspin 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
             }
             @keyframes rspin {
                 from {

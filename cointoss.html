@@ -80,10 +80,14 @@
             function toss() {
                 if (animTime > 0) return;
 
-                animTime = animDuration;
-                last = new Date().getTime();
-                showAmb();
-                requestAnimationFrame(updateAnim);
+                if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches == false) {
+                    if (Math.random() > 0.5) showHead(); else showTail();
+                } else {
+                    animTime = animDuration;
+                    last = new Date().getTime();
+                    showAmb();
+                    requestAnimationFrame(updateAnim);
+                }
             }
 
             function showHead() { coinHead.style.display = "block"; coinTail.style.display = "none"; coinAmb.style.display = "none"; }
