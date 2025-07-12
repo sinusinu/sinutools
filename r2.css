@@ -10,5 +10,4 @@ body {
     background-color: var(--sinutools-bgcolor);
     color: var(--sinutools-fgcolor);
     font-family: 'Pretendard', sans-serif;
-    -webkit-tap-highlight-color: transparent;
 }
