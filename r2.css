@@ -11,3 +11,6 @@ body {
     color: var(--sinutools-fgcolor);
     font-family: 'Pretendard', sans-serif;
 }
+a {
+    -webkit-tap-highlight-color: transparent;
+}
