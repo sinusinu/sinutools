@@ -9,8 +9,39 @@
 <link rel="manifest" href="./sinutools.webmanifest">
 <link rel="apple-touch-icon-precomposed" href="favicon.png">
 <link rel="icon" href="favicon.png">
-<style>body { background: black; overflow: hidden; }</style>
+<style>
+    html {
+        height: 100%;
+        overflow: hidden;
+    }
+    body {
+        background: black;
+        height: 100%;
+        overflow: hidden;
+    }
+    .container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .toast {
+        color: darkgray;
+        font-size: 24px;
+        font-weight: 200;
+        animation: fade 3s linear forwards;
+        user-select: none;
+    }
+    @keyframes fade {
+        0% { opacity: 100%; }
+        33% { opacity: 100%; }
+        100% { opacity: 0%; }
+    }
+</style>
 </head>
 <body>
+    <div class="container">
+        <div class="toast">검은 화면이 표시됩니다.</div>
+    </div>
 </body>
 </html>
