@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>점수판 - 시누의 잡동사니 도구들</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="점수판" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <link rel="manifest" href="./sinutools.webmanifest">
+        <link rel="apple-touch-icon-precomposed" href="favicon.png">
+        <link rel="icon" href="favicon.png">
+        <link rel="stylesheet" href="r2.css">
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            .container {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                height: 100vh;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            .sb-player {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                justify-content: stretch;
+                align-items: stretch;
+                margin: 0 5px;
+            }
+            .sb-player:first-child { margin-left: 0; }
+            .sb-player:last-child { margin-right: 0; }
+            .sb-score {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-grow: 1;
+                text-align: center;
+                background-color: var(--sinutools-acccolor);
+                border-radius: 12px;
+            }
+            .sb-score input {
+                max-width: 40vw;
+                background: none;
+                border: none;
+                text-align: center;
+                color: var(--sinutools-fgcolor);
+                font-size: 10vw;
+            }
+            .sb-controls {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                margin-top: 8px;
+            }
+            .sb-controls-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 25vh;
+                font-size: 15vh;
+                flex-grow: 1;
+                text-align: center;
+                background-color: var(--sinutools-acccolor);
+                border-radius: 12px;
+                margin: 0 4px;
+                cursor: pointer;
+                user-select: none;
+            }
+            @media (orientation: portrait) {
+                .container {
+                    flex-direction: column;
+                }
+                .sb-player {
+                    margin: 5px 0;
+                }
+                .sb-player:first-child { margin-top: 0; }
+                .sb-player:last-child { margin-bottom: 0; }
+                .sb-score input {
+                    max-width: 80vw;
+                    font-size: 10vh;
+                }
+                .sb-controls-btn {
+                    height: 15vh;
+                    font-size: 10vh;
+                    margin: 0 4px;
+                    cursor: pointer;
+                }
+            }
+            .sb-controls-btn:first-child { margin-left: 0; }
+            .sb-controls-btn:last-child { margin-right: 0; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="sb-player">
+                <div class="sb-score"><input id="first" type="text" value="0" onblur="sanitize(true);"/></div>
+                <div class="sb-controls">
+                    <div class="sb-controls-btn" onpointerdown="quack(true, true)" onpointerleave="holup()" onpointerup="holup()">＋</div>
+                    <div class="sb-controls-btn" onpointerdown="quack(true, false)" onpointerleave="holup()" onpointerup="holup()">－</div>
+                </div>
+            </div>
+            <div class="sb-player">
+                <div class="sb-score"><input id="second" type="text" value="0" onblur="sanitize(false);"/></div>
+                <div class="sb-controls">
+                    <div class="sb-controls-btn" onpointerdown="quack(false, true)" onpointerleave="holup()" onpointerup="holup()">＋</div>
+                    <div class="sb-controls-btn" onpointerdown="quack(false, false)" onpointerleave="holup()" onpointerup="holup()">－</div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var firstValue = 0;
+            var secondValue = 0;
+            var firstInput = document.getElementById("first");
+            var secondInput = document.getElementById("second");
+            
+            var holding = false;
+            var holdingFirst = false;
+            var holdingIncrement = false;
+            var holdingCount = 0;
+            var nextTrrr = 0;
+
+            function quack(first, increment) {
+                sanitize(first);
+                holding = true;
+                holdingFirst = first;
+                holdingIncrement = increment;
+                holdingCount = 0;
+                trrr();
+            }
+
+            function holup() {
+                holding = false;
+                clearTimeout(nextTrrr);
+            }
+
+            function trrr() {
+                if (!holding) return;
+
+                if (holdingFirst) {
+                    if (holdingIncrement) firstValue += 1;
+                    else firstValue -= 1;
+                    firstInput.value = firstValue;
+                } else {
+                    if (holdingIncrement) secondValue += 1;
+                    else secondValue -= 1;
+                    secondInput.value = secondValue;
+                }
+
+                holdingCount++;
+
+                if (holdingCount == 1) {
+                    nextTrrr = setTimeout(trrr, 400);
+                } else if (holdingCount < 11) {
+                    nextTrrr = setTimeout(trrr, 100);
+                } else if (holdingCount < 51) {
+                    nextTrrr = setTimeout(trrr, 50);
+                } else {
+                    nextTrrr = setTimeout(trrr, 10);
+                }
+            }
+
+            function sanitize(first) {
+                const inptu = (first ? firstInput : secondInput);
+                var currentValue = (first ? firstValue : secondValue);
+                var newValue = 0;
+
+                if (inptu.value.length == 0) {
+                    newValue = 0;
+                } else {
+                    newValue = parseInt(inptu.value);
+                    if (Number.isNaN(newValue)) newValue = currentValue;
+                }
+
+                if (first) {
+                    firstValue = newValue;
+                    firstInput.value = firstValue;
+                } else {
+                    secondValue = newValue;
+                    secondInput.value = secondValue;
+                }
+            }
+        </script>
+    </body>
+</html>
