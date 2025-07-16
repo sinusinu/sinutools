@@ -78,6 +78,12 @@
                 answer.offsetWidth;
                 answer.classList.add("answer-anim");
             }
+
+            if (!document.referrer.startsWith("https://sinu.pe.kr/sinutools")) {
+                console.log("user is from sinutools!");
+            } else {
+                console.log("user is from somewhere else!");
+            }
         </script>
     </body>
 </html>
