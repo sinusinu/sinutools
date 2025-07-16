@@ -13,11 +13,18 @@
         <link rel="stylesheet" href="r2.css">
         <style>
             body {
+                margin: 0;
+                padding: 0;
                 text-align: center;
                 display: flex;
                 flex-direction: column;
                 font-size: 15px;
                 user-select: none;
+                justify-content: center;
+                align-items: center;
+            }
+            .container {
+                padding: 12px;
             }
             table {
                 margin: auto;
@@ -37,73 +44,75 @@
         </style>
     </head>
     <body>
-        <div style="font-size: 24px; margin-bottom: 8px;">« 시누의 잡동사니 도구들 »</div>
-        <div style="font-size: 16px; margin-bottom: 12px;">필요할 때마다 만든 시답잖은 웹앱 컬렉션</div>
-        <div id="table-container">
-            <table>
-                <tr>
-                    <td class="table-head">이름</td>
-                    <td class="table-head">설명</td>
-                </tr>
-                <tr>
-                    <td>큰시계</td>
-                    <td>화면 가득 차는 큰 시계</td>
-                </tr>
-                <tr>
-                    <td>예니오</td>
-                    <td>예 또는 아니오</td>
-                </tr>
-                <tr>
-                    <td>빙글빙글</td>
-                    <td>랜덤한 방향의 화살표</td>
-                </tr>
-                <tr>
-                    <td>원픽</td>
-                    <td>여러가지 중 하나 랜덤 선택</td>
-                </tr>
-                <tr>
-                    <td>주사위</td>
-                    <td>1~6개의 주사위</td>
-                </tr>
-                <tr>
-                    <td>랜덤숫자</td>
-                    <td>범위 내의 랜덤한 숫자 고르기</td>
-                </tr>
-                <tr>
-                    <td>제비뽑기</td>
-                    <td>제비 무더기에서 하나 뽑기</td>
-                </tr>
-                <tr>
-                    <td>멈춘큰글</td>
-                    <td>재미없게 표시되는 큰 글 전광판</td>
-                </tr>
-                <tr>
-                    <td>흐르는큰글</td>
-                    <td>옆으로 흐르는 큰 글 전광판</td>
-                </tr>
-                <tr>
-                    <td>어둠에다크</td>
-                    <td>전체화면으로 쓰기 좋은 검정</td>
-                </tr>
-                <tr>
-                    <td>동전던지기</td>
-                    <td>랜덤한 앞면 또는 뒷면</td>
-                </tr>
-            </table>
+        <div class="container">
+            <div style="font-size: 24px; margin-bottom: 8px;">« 시누의 잡동사니 도구들 »</div>
+            <div style="font-size: 16px; margin-bottom: 12px;">필요할 때마다 만든 시답잖은 웹앱 컬렉션</div>
+            <div id="table-container">
+                <table>
+                    <tr>
+                        <td class="table-head">이름</td>
+                        <td class="table-head">설명</td>
+                    </tr>
+                    <tr>
+                        <td>큰시계</td>
+                        <td>화면 가득 차는 큰 시계</td>
+                    </tr>
+                    <tr>
+                        <td>예니오</td>
+                        <td>예 또는 아니오</td>
+                    </tr>
+                    <tr>
+                        <td>빙글빙글</td>
+                        <td>랜덤한 방향의 화살표</td>
+                    </tr>
+                    <tr>
+                        <td>원픽</td>
+                        <td>여러가지 중 하나 랜덤 선택</td>
+                    </tr>
+                    <tr>
+                        <td>주사위</td>
+                        <td>1~6개의 주사위</td>
+                    </tr>
+                    <tr>
+                        <td>랜덤숫자</td>
+                        <td>범위 내의 랜덤한 숫자 고르기</td>
+                    </tr>
+                    <tr>
+                        <td>제비뽑기</td>
+                        <td>제비 무더기에서 하나 뽑기</td>
+                    </tr>
+                    <tr>
+                        <td>멈춘큰글</td>
+                        <td>재미없게 표시되는 큰 글 전광판</td>
+                    </tr>
+                    <tr>
+                        <td>흐르는큰글</td>
+                        <td>옆으로 흐르는 큰 글 전광판</td>
+                    </tr>
+                    <tr>
+                        <td>어둠에다크</td>
+                        <td>전체화면으로 쓰기 좋은 검정</td>
+                    </tr>
+                    <tr>
+                        <td>동전던지기</td>
+                        <td>랜덤한 앞면 또는 뒷면</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="font-size: 24px; margin: 16px;">« 사용권 및 안내 »</div>
+            <div>
+                <div>시누의 잡동사니 도구들은</div>
+                <div>① 개인, 기업, 기관 등 상관없이 자유롭게 사용 가능합니다.</div>
+                <div>② 어떤 추적 도구도 사용하지 않습니다.</div>
+                <div>③ (아직까지는) 광고가 없습니다.</div>
+            </div>
+            <div style="font-size: 24px; margin: 16px;">« 오픈 소스 라이선스 »</div>
+            <div>
+                <div>본 프로젝트는 MIT 라이선스 하에 배포됩니다.</div>
+                <div style="margin-top: 12px;">본 프로젝트는 <a href="https://twemoji.twitter.com/">Twemoji</a>를 일부 변형하여 사용하고 있습니다.</div>
+                <div>Twemoji는 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 하에 사용되었습니다.</div>
+            </div>
+            <div style="margin: 26px; font-size: 14px;"><a href="privacy.html">개인정보처리방침</a></div>
         </div>
-        <div style="font-size: 24px; margin: 16px;">« 사용권 및 안내 »</div>
-        <div>
-            <div>시누의 잡동사니 도구들은</div>
-            <div>① 개인, 기업, 기관 등 상관없이 자유롭게 사용 가능합니다.</div>
-            <div>② 어떤 추적 도구도 사용하지 않습니다.</div>
-            <div>③ (아직까지는) 광고가 없습니다.</div>
-        </div>
-        <div style="font-size: 24px; margin: 16px;">« 오픈 소스 라이선스 »</div>
-        <div>
-            <div>본 프로젝트는 MIT 라이선스 하에 배포됩니다.</div>
-            <div style="margin-top: 12px;">본 프로젝트는 <a href="https://twemoji.twitter.com/">Twemoji</a>를 일부 변형하여 사용하고 있습니다.</div>
-            <div>Twemoji는 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 하에 사용되었습니다.</div>
-        </div>
-        <div style="margin: 26px; font-size: 14px;"><a href="privacy.html">개인정보처리방침</a></div>
     </body>
 </html>
