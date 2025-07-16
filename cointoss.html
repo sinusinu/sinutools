@@ -13,7 +13,9 @@
         <style>
             :root {
                 --anim-translate: 0.0;
-                --anim-flip: 0.0deg;
+                --anim-flip: 0deg;
+                --anim-sideflip: 0deg;
+                --coin-rotation: 0deg;
             }
             body {
                 text-align: center;
@@ -31,7 +33,7 @@
                 justify-content: center;
             }
             .coin {
-                transform: translateY(calc(var(--anim-translate) * -70vh)) scaleX(calc(1 + (var(--anim-translate) * 0.75))) rotateX(var(--anim-flip));
+                transform: translateY(calc(var(--anim-translate) * -70vh)) scaleX(calc(1 + (var(--anim-translate) * 0.75))) rotateX(var(--anim-flip)) rotateY(var(--anim-sideflip)) rotateZ(var(--coin-rotation));
             }
             .cointoss-button {
                 position: absolute;
@@ -69,6 +71,8 @@
         <div class="cointoss-button" onpointerdown="toss()">던져요</div>
         <script>
             const animDuration = 700;
+            
+            var r = document.querySelector(":root");
 
             var coinHead = document.getElementById("coin-head");
             var coinTail = document.getElementById("coin-tail");
@@ -81,6 +85,8 @@
                 if (animTime > 0) return;
 
                 if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches == false) {
+                    r.style.setProperty("--anim-sideflip", "0deg");
+                    r.style.setProperty("--coin-rotation", "0deg");
                     if (Math.random() > 0.5) showHead(); else showTail();
                 } else {
                     animTime = animDuration;
@@ -109,9 +115,13 @@
                     document.documentElement.style.setProperty("--anim-flip", "0deg");
                     animTime = 0;
                     if (Math.random() > 0.5) showHead(); else showTail();
+                    r.style.setProperty("--anim-sideflip", "0deg");
+                    var coinRotate = Math.round(Math.random() * 360);
+                    r.style.setProperty("--coin-rotation", coinRotate + "deg");
                 } else {
                     document.documentElement.style.setProperty("--anim-translate", tossPos);
                     document.documentElement.style.setProperty("--anim-flip", tossRot + "deg");
+                    r.style.setProperty("--anim-sideflip", (tossRot / 8) + "deg");
                     requestAnimationFrame(updateAnim);
                 }
             }
