@@ -61,13 +61,14 @@
                     <circle cx="100" cy="100" r="70" fill="#e0e0e0" stroke="#aaa" stroke-width="3" />
                     <text x="100" y="116" font-size="48" font-weight="bold" text-anchor="middle" fill="#555" font-family="monospace">500</text>
                 </svg>
-                <svg id="coin-amb" width="200" height="200" viewBox="0 0 200 200" style="display: none;">
+                <svg id="coin-amb" width="200" height="200" viewBox="0 0 200 200" style="display: none; filter: url(#blur);">
                     <circle cx="100" cy="100" r="90" fill="silver" stroke="#ccc" stroke-width="5" />
                     <circle cx="100" cy="100" r="70" fill="#e0e0e0" stroke="#aaa" stroke-width="3" />
                 </svg>
             </div>
         </div>
         <div class="cointoss-button" onpointerdown="toss()">던져요</div>
+        <svg width="1" height="1"><defs><filter id="blur"><feGaussianBlur in="SourceGraphic" stdDeviation="0 4" /></filter></defs></svg>
         <script>
             const animDuration = 700;
             
