@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>사이니지 - 시누의 잡동사니 도구들</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="사이니지" />
+        <meta property="og:description" content="시누의 잡동사니 도구들" />
+        <link rel="manifest" href="./sinutools.webmanifest">
+        <link rel="apple-touch-icon-precomposed" href="favicon.png">
+        <link rel="icon" href="favicon.png">
+        <link rel="stylesheet" href="r2.css">
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            .container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                overflow-x: hidden;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: default;
+                text-align: center;
+            }
+            .hidden {
+                visibility: hidden;
+            }
+            .drop-zone {
+                width: 280px;
+                height: 100px;
+                border-radius: 12px;
+                border: 4px dashed var(--sinutools-acccolor);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
+            }
+            .config-element {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
+            }
+            #image-picker {
+                opacity: 0;
+                position: absolute;
+                z-index: -1;
+            }
+            .button {
+                border-radius: 4px;
+                padding: 8px 16px;
+                background-color: var(--sinutools-acccolor);
+                cursor: pointer;
+            }
+            .images-list {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+            }
+            .image-preview-container {
+                width: 80px;
+                height: 100px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--sinutools-acccolor);
+            }
+            .image-preview {
+                width: 80px;
+                height: 80px;
+                object-fit: contain;
+            }
+            .image-remove {
+                width: 80px;
+                height: 20px;
+                background-color: darkred;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                user-select: none;
+            }
+            .blackbg {
+                background-color: black;
+            }
+            .beegboi {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+                object-fit: contain;
+            }
+            .hide-cursor {
+                cursor: none;
+            }
+            .hspace8 {
+                width: 8px;
+            }
+            .mb24 {
+                margin-bottom: 24px;
+            }
+            #container-signage img {
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container-config" class="container">
+            <div class="mb24"><label for="image-picker"><div class="button">이미지 추가하기</div></label><input id="image-picker" type="file" multiple accept="image/*"></div>
+            <div id="drop-zone" class="drop-zone mb24">또는 여기에 이미지 드래그</div>
+            <div id="images-count" class="mb24">0개의 이미지 선택됨</div>
+            <div id="images-list" class="images-list mb24"></div>
+            <div id="interval-display">전환 간격: 1초</div>
+            <div class="mb24"><input type="range" id="config-interval" name="config-interval" min="1" max="20" value="1" oninput="updateInterval(this.value)"/></div>
+            <div class="button mb24" onclick="startSignage()">사이니지 시작</div>
+            <div>사이니지 설정을 초기화하려면</div>
+            <div>페이지를 새로고침하세요.</div>
+        </div>
+        <div id="container-signage" class="container hidden blackbg">
+            <img id="signage-current" class="beegboi">
+        </div>
+        <script>
+            const containerConfig = document.getElementById("container-config");
+            const containerSignage = document.getElementById("container-signage");
+            const dropZone = document.getElementById("drop-zone");
+            const imagesCount = document.getElementById("images-count");
+            const imagesList = document.getElementById("images-list");
+            const signageCurrent = document.getElementById("signage-current");
+            // const signageNext = document.getElementById("signage-next");
+            var imagesArray = [];
+            var currentIndex = 0;
+            var changeInterval = 1000;
+
+            document.getElementById("image-picker").addEventListener("change", ev => {
+                for (var i = 0; i < ev.target.files.length; i++) {
+                    addImage(URL.createObjectURL(ev.target.files[i]));
+                }
+                reconstructPreviews();
+            });
+            
+            dropZone.addEventListener("dragover", ev => ev.preventDefault());
+            dropZone.addEventListener("drop", ev => {
+                ev.preventDefault();
+                for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+                    addImage(URL.createObjectURL(ev.dataTransfer.files[i]));
+                }
+                reconstructPreviews();
+            });
+
+            containerSignage.addEventListener("fullscreenchange", ev => {
+                if (document.fullscreenElement) {
+                    signageCurrent.classList.add("hide-cursor");
+                } else {
+                    signageCurrent.classList.remove("hide-cursor");
+                }
+            });
+
+            document.getElementById("config-interval").value = 1;
+
+            function addImage(url) {
+                imagesArray.push(url);
+            }
+
+            function removeImage(idx) {
+                imagesArray.splice(idx, 1);
+                reconstructPreviews();
+            }
+
+            function reconstructPreviews() {
+                imagesCount.innerText = imagesArray.length + "개의 이미지 선택됨";
+                var imagesListHtml = "";
+                for (var i = 0; i < imagesArray.length; i++) {
+                    imagesListHtml += '<div class="image-preview-container"><img class="image-preview" src="' + imagesArray[i] + '"><div class="image-remove" onclick="removeImage(' + i + ')">제거</div></div>';
+                    if (i < imagesArray.length - 1) imagesListHtml += '<div class="hspace8"></div>';
+                }
+                imagesList.innerHTML = imagesListHtml;
+            }
+
+            function updateInterval(newInterval) {
+                document.getElementById("interval-display").innerText = "전환 간격: " + newInterval + "초";
+                changeInterval = newInterval * 1000;
+            }
+
+            function startSignage() {
+                if (imagesArray.length == 0) {
+                    imagesCount.innerText = "표시할 이미지가 없어요!";
+                    return;
+                }
+
+                containerConfig.classList.add("hidden");
+                containerSignage.classList.remove("hidden");
+                containerSignage.requestFullscreen();
+
+                signageCurrent.src = imagesArray[0];
+
+                if (imagesArray.length > 1) setTimeout(displayNextSign, changeInterval);
+            }
+
+            function displayNextSign() {
+                currentIndex++;
+                if (currentIndex >= imagesArray.length) currentIndex = 0;
+                signageCurrent.src = imagesArray[currentIndex];
+                setTimeout(displayNextSign, changeInterval);
+            }
+        </script>
+    </body>
+</html>
